@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🏓 Ping Pong Rotation — Зсув по 2 гри та Свінгер</title>
+<title>🏓 Ping Pong Rotation — Постійні Пари та Свінгер</title>
 
 <style>
     :root {
@@ -21,6 +21,7 @@
         --red: #ef4444;
         --red-bg: rgba(239, 68, 68, 0.16);
         --orange: #f97316;
+        --purple: #a855f7;
         --border: #243046;
         --border-subtle: #1e293b;
         --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
@@ -29,21 +30,25 @@
 
     * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
         -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, -apple-system, sans-serif;
+    html, body {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
         background: var(--bg);
         color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         line-height: 1.5;
         min-height: 100vh;
     }
 
     /* HEADER */
     header {
-        background: rgba(11, 15, 25, 0.85);
+        background: rgba(11, 15, 25, 0.88);
         border-bottom: 1px solid var(--border);
         padding: 14px 18px;
         position: sticky;
@@ -54,27 +59,25 @@
     }
 
     .header-inner {
-        max-width: 1050px;
+        max-width: 950px;
         margin: auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
         gap: 12px;
     }
 
-    .logo-title {
+    .logo-box {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
     h1 {
-        margin: 0;
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 800;
         letter-spacing: -0.5px;
-        background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+        background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -83,22 +86,27 @@
         background: #151d2e;
         color: var(--text);
         border: 1px solid #334155;
-        padding: 10px 14px;
+        padding: 8px 14px;
         border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 700;
         cursor: pointer;
         outline: none;
+        transition: border-color .15s;
     }
 
-    /* MAIN CONTAINER */
+    .day-selector select:focus {
+        border-color: var(--primary);
+    }
+
+    /* MAIN */
     main {
-        max-width: 1050px;
-        margin: 18px auto;
-        padding: 0 16px 60px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 18px;
+        max-width: 950px;
+        margin: auto;
+        padding: 16px 14px 60px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
 
     /* CARDS */
@@ -106,13 +114,14 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 22px;
+        padding: 20px;
         box-shadow: var(--shadow);
         animation: fadeIn 0.25s ease-out;
+        overflow-wrap: anywhere;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(4px); }
+        from { opacity: 0; transform: translateY(5px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
@@ -120,13 +129,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
     }
 
     h2 {
         font-size: 17px;
         font-weight: 700;
-        margin: 0;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -134,7 +142,7 @@
 
     .badge {
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         padding: 4px 10px;
         border-radius: 20px;
         background: rgba(59, 130, 246, 0.15);
@@ -142,13 +150,19 @@
         border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
+    .badge-swinger {
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+        color: #e879f9;
+        border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+
     /* BUTTONS */
     button {
         border: 0;
         border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 14px;
-        font-weight: 600;
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 700;
         cursor: pointer;
         transition: all .15s ease;
         display: inline-flex;
@@ -159,7 +173,7 @@
     }
 
     button:hover {
-        filter: brightness(1.1);
+        filter: brightness(1.08);
     }
 
     button:active {
@@ -169,7 +183,7 @@
     .btn-primary {
         background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         color: white;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
     }
 
     .btn-secondary {
@@ -192,14 +206,14 @@
     .btn-undo {
         background: #334155;
         color: #f1f5f9;
-        font-size: 13px;
-        padding: 8px 14px;
+        font-size: 12px;
+        padding: 7px 13px;
         border-radius: 8px;
     }
 
     .btn-sm {
-        padding: 8px 14px;
-        font-size: 13px;
+        padding: 8px 12px;
+        font-size: 12px;
         border-radius: 10px;
     }
 
@@ -208,10 +222,10 @@
         background: #0b0f19;
         color: var(--text);
         border-radius: 12px;
-        padding: 12px 16px;
-        font-size: 15px;
+        padding: 11px 14px;
+        font-size: 14px;
         outline: none;
-        transition: border-color .15s;
+        transition: border-color .15s, box-shadow .15s;
     }
 
     input:focus, select:focus {
@@ -219,91 +233,13 @@
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
     }
 
-    /* PLAYERS SECTION */
-    .players-input {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .players-input input {
-        flex: 1;
-    }
-
-    .player-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 14px 0;
-        min-height: 40px;
-    }
-
-    .player-chip {
-        background: #0f172a;
-        border: 1px solid var(--border);
-        color: var(--text);
-        border-radius: 30px;
-        padding: 6px 8px 6px 14px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        font-weight: 600;
-        transition: all .15s;
-    }
-
-    .player-chip.paused {
-        opacity: 0.5;
-        border-style: dashed;
-        background: #1e293b;
-    }
-
-    .player-chip-name {
-        cursor: pointer;
-        padding: 2px 4px;
-        border-radius: 4px;
-    }
-
-    .player-chip-name:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .player-chip-actions {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .chip-btn {
-        background: #1e293b;
-        border: 1px solid #475569;
-        padding: 5px 8px;
-        font-size: 12px;
-        color: var(--text);
-        border-radius: 8px;
-        cursor: pointer;
-        min-width: 28px;
-        min-height: 28px;
-    }
-
-    .chip-btn:hover {
-        background: #3b82f6;
-        color: white;
-        border-color: #3b82f6;
-    }
-
-    .chip-btn.remove:hover {
-        background: #ef4444;
-        border-color: #ef4444;
-    }
-
-    /* CURRENT MATCH */
+    /* CURRENT MATCH (HERO CARD WITH NEON GRADIENT) */
     .current-match-card {
         background: linear-gradient(180deg, #182235 0%, #0f172a 100%);
         border: 2px solid #3b82f6;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.2);
     }
 
     .current-match-card::before {
@@ -320,9 +256,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 14px;
         flex-wrap: wrap;
         gap: 8px;
-        margin-bottom: 16px;
     }
 
     .match-tag {
@@ -330,30 +266,24 @@
         font-weight: 800;
         color: #93c5fd;
         background: rgba(59, 130, 246, 0.2);
-        padding: 5px 14px;
+        padding: 5px 12px;
         border-radius: 20px;
         border: 1px solid rgba(59, 130, 246, 0.4);
-    }
-
-    .match-rules-hint {
-        font-size: 12px;
-        color: var(--text-muted);
     }
 
     .teams-grid {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        gap: 16px;
-        margin: 20px 0;
+        gap: 14px;
+        margin: 16px 0;
     }
 
     .team-box {
         border-radius: 16px;
-        padding: 22px 14px;
+        padding: 18px 12px;
         text-align: center;
         border: 2px solid;
-        position: relative;
         transition: transform .15s, box-shadow .15s;
     }
 
@@ -367,24 +297,24 @@
         background: linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(30, 41, 59, 0.7));
     }
 
-    /* Highlight team finishing 2nd game */
     .team-box.final-game {
+        border-color: #f59e0b;
         box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
     }
 
     .team-title {
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.8px;
         font-weight: 800;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
 
     .team-a .team-title { color: #60a5fa; }
     .team-b .team-title { color: #fb923c; }
 
     .team-names {
-        font-size: 21px;
+        font-size: 19px;
         font-weight: 800;
         color: #ffffff;
         word-break: break-word;
@@ -392,94 +322,203 @@
 
     .game-pill {
         display: inline-block;
-        margin-top: 10px;
-        font-size: 12px;
+        margin-top: 8px;
+        font-size: 11px;
         font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 14px;
+        padding: 4px 10px;
+        border-radius: 12px;
     }
 
     .game-pill.game-1 {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.1));
+        background: rgba(16, 185, 129, 0.22);
         color: #34d399;
         border: 1px solid rgba(16, 185, 129, 0.5);
     }
 
     .game-pill.game-2 {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.1));
+        background: rgba(245, 158, 11, 0.22);
         color: #fbbf24;
         border: 1px solid rgba(245, 158, 11, 0.5);
     }
 
     .vs-divider {
         font-weight: 900;
-        font-size: 16px;
+        font-size: 14px;
         color: var(--text-muted);
         background: #0b0f19;
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid var(--border);
+        margin: auto;
     }
 
     .action-buttons {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 18px;
+        gap: 12px;
+        margin-top: 16px;
     }
 
     .btn-win-a {
         background: linear-gradient(135deg, #2563eb, #1d4ed8);
         color: white;
-        padding: 16px;
-        font-size: 16px;
+        padding: 15px;
+        font-size: 15px;
         font-weight: 700;
-        min-height: 54px;
+        min-height: 52px;
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
     }
 
     .btn-win-b {
         background: linear-gradient(135deg, #ea580c, #c2410c);
         color: white;
-        padding: 16px;
-        font-size: 16px;
+        padding: 15px;
+        font-size: 15px;
         font-weight: 700;
-        min-height: 54px;
+        min-height: 52px;
         box-shadow: 0 6px 16px rgba(234, 88, 12, 0.35);
     }
 
     .rotation-status-banner {
-        margin-top: 16px;
-        padding: 14px 18px;
+        margin-top: 14px;
+        padding: 12px 16px;
         border-radius: 12px;
         background: #0b0f19;
         border: 1px solid var(--border);
-        font-size: 13px;
+        font-size: 12px;
         color: var(--text-muted);
-        line-height: 1.4;
     }
 
     .rotation-status-banner strong {
         color: #e2e8f0;
     }
 
+    /* PAIRS BUILDER */
+    .pairs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .pair-card {
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .pair-card.swinger-card {
+        border-color: rgba(168, 85, 247, 0.4);
+        background: linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, #0b0f19 100%);
+    }
+
+    .pair-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pair-card-title {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #93c5fd;
+    }
+
+    .pair-players-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .player-row-item {
+        background: #151d2e;
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        padding: 9px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .player-row-item.empty-slot {
+        background: rgba(255, 255, 255, 0.02);
+        border-style: dashed;
+        color: var(--text-muted);
+        font-size: 12px;
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .player-row-item.paused {
+        opacity: 0.5;
+        border-style: dashed;
+        background: #1e293b;
+    }
+
+    .player-actions-mini {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .pair-select-mini {
+        padding: 5px 7px;
+        font-size: 11px;
+        border-radius: 8px;
+        background: #0f172a;
+        color: #93c5fd;
+        font-weight: 700;
+        border: 1px solid #334155;
+    }
+
+    .mini-btn {
+        background: #1e293b;
+        border: 1px solid #475569;
+        color: var(--text);
+        padding: 5px 8px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        min-width: 30px;
+        min-height: 30px;
+    }
+
+    .mini-btn:hover {
+        color: white;
+        background: #3b82f6;
+        border-color: #3b82f6;
+    }
+
+    .mini-btn.remove:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+    }
+
     /* QUEUE / BENCH PREVIEW */
     .queue-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 14px;
+        gap: 12px;
+        margin-top: 12px;
     }
 
     .queue-box {
         background: #0b0f19;
         border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 16px;
+        border-radius: 14px;
+        padding: 14px;
     }
 
     .queue-title {
@@ -489,7 +528,6 @@
         color: var(--text-muted);
         margin-bottom: 10px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
     }
 
@@ -497,7 +535,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px 12px;
+        padding: 9px 12px;
         background: #151d2e;
         border: 1px solid var(--border-subtle);
         border-radius: 10px;
@@ -523,42 +561,44 @@
     .summary-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
+        gap: 10px;
     }
 
     .summary-card {
         background: #0b0f19;
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 16px 12px;
+        padding: 16px 10px;
         text-align: center;
     }
 
     .summary-val {
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 800;
         color: #f8fafc;
     }
 
     .summary-lbl {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
-        margin-top: 4px;
+        margin-top: 3px;
     }
 
-    /* TABLES */
+    /* TABLES WITH HOVER EFFECT */
     .table-responsive {
         overflow-x: auto;
         margin-top: 10px;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid var(--border);
+        -webkit-overflow-scrolling: touch;
     }
 
     .stats-table {
         width: 100%;
         border-collapse: collapse;
         text-align: left;
-        font-size: 14px;
+        font-size: 13px;
+        white-space: nowrap;
     }
 
     .stats-table th {
@@ -567,24 +607,24 @@
         color: var(--text-muted);
         font-weight: 700;
         border-bottom: 1px solid var(--border);
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .stats-table td {
-        padding: 14px;
+        padding: 12px 14px;
         border-bottom: 1px solid var(--border);
+        transition: background .12s ease;
     }
 
     .stats-table tr:hover td {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.04);
     }
 
     .rank-cell {
         font-weight: 800;
-        color: var(--text-muted);
-        width: 36px;
+        width: 32px;
     }
 
     .rank-1 { color: #f59e0b; }
@@ -613,9 +653,9 @@
     /* HISTORY */
     .day-tabs {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         overflow-x: auto;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
         padding-bottom: 4px;
     }
 
@@ -623,11 +663,10 @@
         background: #0b0f19;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        padding: 10px 16px;
+        padding: 9px 14px;
         border-radius: 10px;
-        white-space: nowrap;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 700;
     }
 
     .day-tab.active {
@@ -640,51 +679,41 @@
         background: #0b0f19;
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 14px 16px;
+        padding: 12px 14px;
         margin-bottom: 8px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
+        font-size: 13px;
     }
 
     .history-main {
         display: flex;
         align-items: center;
-        gap: 12px;
-        font-size: 14px;
-        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .history-num {
         font-weight: 800;
         color: var(--text-muted);
-        min-width: 28px;
     }
 
-    .history-winner {
-        color: #60a5fa;
-        font-weight: 700;
-    }
-
-    .history-loser {
-        color: var(--text-muted);
-    }
+    .history-winner { color: #60a5fa; font-weight: 700; }
+    .history-loser { color: var(--text-muted); }
 
     .history-meta {
         font-size: 12px;
         color: var(--text-muted);
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
     }
 
     .btn-delete-match {
         background: none;
         color: #64748b;
-        padding: 6px;
-        font-size: 15px;
+        padding: 4px;
+        font-size: 14px;
     }
 
     .btn-delete-match:hover {
@@ -693,28 +722,97 @@
 
     .empty-state {
         text-align: center;
-        padding: 35px 10px;
+        padding: 30px 10px;
         color: var(--text-muted);
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .controls-row {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        margin-top: 14px;
+        margin-top: 12px;
     }
 
-    /* TOAST NOTIFICATIONS */
+    /* ============================================================
+       MODERN POPUPS & MODALS (ВСПЛИВАШКИ)
+    ============================================================ */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-box {
+        background: #151d2e;
+        border: 1px solid #334155;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 400px;
+        padding: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        transform: scale(0.92) translateY(10px);
+        transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.active .modal-box {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-title {
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-body {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+
+    .modal-input {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    /* TOASTS (ВСПЛИВАЮЧІ ПОВІДОМЛЕННЯ) */
     #toastContainer {
         position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 10000;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10001;
         display: flex;
         flex-direction: column;
         gap: 10px;
         pointer-events: none;
+        max-width: 360px;
     }
 
     .toast {
@@ -722,78 +820,88 @@
         border: 1px solid #475569;
         color: #f8fafc;
         padding: 12px 18px;
-        border-radius: 12px;
+        border-radius: 14px;
         font-size: 14px;
         font-weight: 600;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: center;
         gap: 10px;
-        animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        animation: toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         pointer-events: auto;
     }
 
-    .toast.success {
-        border-color: #10b981;
-        background: #064e3b;
-    }
+    .toast.success { border-color: #10b981; background: #064e3b; }
+    .toast.error { border-color: #ef4444; background: #7f1d1d; }
+    .toast.info { border-color: #3b82f6; background: #1e3a8a; }
 
-    .toast.error {
-        border-color: #ef4444;
-        background: #7f1d1d;
-    }
-
-    .toast.info {
-        border-color: #3b82f6;
-        background: #1e3a8a;
-    }
-
-    @keyframes toastIn {
-        from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    @keyframes toastSlideIn {
+        from { opacity: 0; transform: translateY(16px) scale(0.92); }
         to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* MOBILE RESPONSIVENESS */
+    /* MOBILE BREAKPOINT */
     @media (max-width: 650px) {
-        body {
-            font-size: 14px;
+        main {
+            padding: 10px 8px 50px;
+            gap: 12px;
+        }
+
+        .card {
+            padding: 16px 12px;
+            border-radius: 14px;
         }
 
         .teams-grid {
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 8px;
         }
 
-        .vs-divider {
-            margin: auto;
+        .team-box {
+            padding: 14px 10px;
         }
 
         .action-buttons {
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-win-a, .btn-win-b {
-            min-height: 58px;
-            font-size: 16px;
+            min-height: 54px;
+            font-size: 15px;
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
         }
 
         .queue-container {
             grid-template-columns: 1fr;
+            gap: 8px;
         }
 
-        .summary-grid {
+        .pairs-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .controls-row {
+            display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
-        .card {
-            padding: 18px 14px;
+        .controls-row button {
+            width: 100%;
+            padding: 10px 8px;
+            font-size: 12px;
         }
 
         #toastContainer {
-            left: 16px;
-            right: 16px;
-            bottom: 16px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            max-width: 100%;
         }
     }
 </style>
@@ -803,10 +911,10 @@
 
 <header>
     <div class="header-inner">
-        <div class="logo-title">
+        <div class="logo-box">
             <span>🏓</span>
             <h1>Ping Pong Rotation</h1>
-            <span class="badge">Зсув по 2 гри</span>
+            <span class="badge" style="font-size:10px">Постійні Пари</span>
         </div>
 
         <div class="day-selector">
@@ -825,7 +933,7 @@
 
 <main>
 
-    <!-- CURRENT MATCH SECTION -->
+    <!-- CURRENT MATCH -->
     <section id="matchCard" class="card current-match-card">
         <div class="card-header">
             <h2>🏓 Стіл · Зараз грають</h2>
@@ -839,7 +947,7 @@
     <section class="card">
         <div class="card-header">
             <h2>⏳ Лава запасних та Черга виходу</h2>
-            <button class="btn-secondary btn-sm" onclick="rebuildRotation()">🔄 Перебудувати пари</button>
+            <button class="btn-secondary btn-sm" onclick="rebuildRotation()">🔄 Скинути чергу</button>
         </div>
 
         <div class="queue-container">
@@ -853,52 +961,61 @@
 
             <div class="queue-box">
                 <div class="queue-title">
-                    <span>🔄 Свінгер (плаваючий гравець)</span>
-                    <span class="badge">Підміна</span>
+                    <span>🔄 Свінгер (плаваючий)</span>
+                    <span id="swingerStatusBadge" class="badge">Немає</span>
                 </div>
                 <div id="swingerList"></div>
             </div>
         </div>
     </section>
 
-    <!-- PLAYERS MANAGEMENT -->
+    <!-- PLAYERS & CUSTOM PAIRS BUILDER -->
     <section class="card">
         <div class="card-header">
-            <h2>👥 Гравці (<span id="playerCount">0</span>)</h2>
-            <div class="badge" id="activePlayerCount">0 активних</div>
+            <h2>👥 Склад пар та гравці (<span id="playerCount">0</span>)</h2>
+            <button class="btn-secondary btn-sm" onclick="autoBalancePairs()">🎲 Авто-розподіл пар</button>
         </div>
 
-        <div class="players-input">
-            <input
-                id="playerInput"
-                type="text"
-                placeholder="Введіть ім'я нового гравця..."
-                onkeydown="if(event.key === 'Enter') addPlayer()"
-            >
-            <button class="btn-primary" onclick="addPlayer()">Додати</button>
+        <!-- INPUT FORM WITH PAIR SELECTOR -->
+        <div style="background: #0b0f19; border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+                ➕ Додати нового гравця:
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <input
+                    id="playerInput"
+                    type="text"
+                    placeholder="Ім'я гравця..."
+                    style="flex: 2; min-width: 150px;"
+                    onkeydown="if(event.key === 'Enter') addPlayer()"
+                >
+                <select id="pairSelectDropdown" style="flex: 1; min-width: 140px;">
+                    <option value="auto">✨ Авто-розподіл</option>
+                    <option value="1">👥 Пара #1</option>
+                    <option value="2">👥 Пара #2</option>
+                    <option value="3">👥 Пара #3</option>
+                    <option value="4">👥 Пара #4</option>
+                    <option value="5">👥 Пара #5</option>
+                    <option value="6">👥 Пара #6</option>
+                    <option value="swinger">🔄 Свінгер</option>
+                </select>
+                <button class="btn-primary" onclick="addPlayer()">+ Додати</button>
+            </div>
         </div>
 
-        <div id="playerList" class="player-list"></div>
+        <!-- VISUAL PAIRS BUILDER -->
+        <div id="pairsContainer" class="pairs-grid"></div>
 
         <div class="controls-row">
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers()">
-                ➕ Додати 7 гравців (Боря...Льоха)
-            </button>
-            <button class="btn-secondary btn-sm" onclick="simulateMatches(10)">
-                🎲 Зімітувати 10 матчів
-            </button>
-            <button class="btn-secondary btn-sm" onclick="simulateMatches(40)">
-                🎲 Зімітувати 40 матчів
-            </button>
-            <button class="btn-secondary btn-sm" onclick="exportData()">
-                💾 Експорт JSON
-            </button>
-            <button class="btn-secondary btn-sm" onclick="importData()">
-                📥 Імпорт JSON
-            </button>
-            <button class="btn-danger btn-sm" onclick="resetAll()">
-                ⚠️ Скинути все
-            </button>
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(6)">➕ 6 гравців (3 пари)</button>
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(7)">➕ 7 гравців (3 пари + 1)</button>
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(8)">➕ 8 гравців (4 пари)</button>
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(9)">➕ 9 гравців (4 пари + 1)</button>
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(10)">➕ 10 гравців (5 пар)</button>
+            <button class="btn-secondary btn-sm" onclick="simulateMatches(10)">🎲 +10 матчів</button>
+            <button class="btn-secondary btn-sm" onclick="exportData()">💾 Експорт</button>
+            <button class="btn-secondary btn-sm" onclick="importData()">📥 Імпорт</button>
+            <button class="btn-danger btn-sm" onclick="promptResetAll()">⚠️ Скинути все</button>
         </div>
     </section>
 
@@ -924,7 +1041,7 @@
 
             <div class="summary-card">
                 <div id="todayPlayers" class="summary-val">0</div>
-                <div class="summary-lbl">Активних гравців</div>
+                <div class="summary-lbl">Активних</div>
             </div>
         </div>
     </section>
@@ -937,7 +1054,7 @@
 
     <!-- DUOS RANKING -->
     <section class="card">
-        <h2>👥 Рейтинг зіграності дуетів (Найкращі пари)</h2>
+        <h2>👥 Рейтинг зіграності дуетів (Пари)</h2>
         <div id="duoRanking"></div>
     </section>
 
@@ -966,12 +1083,26 @@
 
 </main>
 
+<!-- TOASTS CONTAINER -->
 <div id="toastContainer"></div>
+
+<!-- CUSTOM MODAL DIALOG (ВСПЛИВАШКА) -->
+<div id="customModal" class="modal-overlay">
+    <div class="modal-box">
+        <div id="modalTitle" class="modal-title">✏️ Редагування</div>
+        <div id="modalBody" class="modal-body"></div>
+        <div class="modal-actions">
+            <button id="modalBtnCancel" class="btn-secondary">Скасувати</button>
+            <button id="modalBtnConfirm" class="btn-primary">Підтвердити</button>
+        </div>
+    </div>
+</div>
+
 <input type="file" id="importFileInput" style="display:none" accept=".json" onchange="handleFileImport(event)">
 
 <script>
 /* ============================================================
-   DATA STATE & ROBUST NORMALIZATION
+   DATA STATE
 ============================================================ */
 
 const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -987,19 +1118,19 @@ const DAY_NAMES = {
 };
 
 const defaultState = {
-    players: [],
+    players: [],            // [ { name: "Боря", paused: false, pairId: 1 }, ... ]
     currentDay: "mon",
     days: {
         mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: []
     },
     rotation: {
-        pairs: [],              // Array of pairs [ ['A', 'B'], ['C', 'D'], ... ]
-        pairsQueue: [],         // Indices of pairs waiting in queue [2, ...]
-        swinger: null,          // Single player name currently swinging
-        tableA: null,           // { players: ['A', 'B'], games: 0, pairIdx: 0 }
-        tableB: null,           // { players: ['C', 'D'], games: 0, pairIdx: 1 }
-        isFirstMatch: true,
-        lastRestedWasP0: false  // Alternating tie-breaker flag
+        corePairs: [],          // [ ["Боря", "Даня"], ["Тьома", "Нацик"], ... ]
+        pairQueue: [],          // [2, 3...] core pair indices waiting
+        swinger: null,          // "Ромчик"
+        swingerNextPairIdx: 0,  // Round-robin pair target for swinger
+        tableA: null,           // { coreIdx: 0, currentPlayers: ["Боря", "Даня"], games: 0, withSwinger: false }
+        tableB: null,           // { coreIdx: 1, currentPlayers: ["Тьома", "Нацик"], games: 0, withSwinger: false }
+        isFirstMatch: true
     },
     undoStack: []
 };
@@ -1014,10 +1145,13 @@ function loadState() {
         const parsed = JSON.parse(raw);
 
         let rawPlayers = Array.isArray(parsed.players) ? parsed.players : [];
-        let players = rawPlayers.map(p => {
-            if (typeof p === "string") return { name: p.trim(), paused: false };
-            if (p && typeof p === "object") return { name: (p.name || "").trim(), paused: !!p.paused };
-            return { name: String(p || "").trim(), paused: false };
+        let players = rawPlayers.map((p, idx) => {
+            if (typeof p === "string") return { name: p.trim(), paused: false, pairId: Math.floor(idx / 2) + 1 };
+            if (p && typeof p === "object") {
+                let pId = p.pairId !== undefined ? p.pairId : (p.customPair !== undefined ? p.customPair + 1 : Math.floor(idx / 2) + 1);
+                return { name: (p.name || "").trim(), paused: !!p.paused, pairId: pId };
+            }
+            return { name: String(p || "").trim(), paused: false, pairId: 1 };
         }).filter(p => p.name !== "");
 
         const currentDay = (parsed.currentDay && DAYS.includes(parsed.currentDay)) ? parsed.currentDay : "mon";
@@ -1041,6 +1175,11 @@ function save() {
     localStorage.setItem("pingPongState", JSON.stringify(state));
 }
 
+
+/* ============================================================
+   CUSTOM IN-APP MODALS & TOASTS (СУЧАСНІ ВСПЛИВАШКИ)
+============================================================ */
+
 function showToast(message, type = "info") {
     const container = document.getElementById("toastContainer");
     const toast = document.createElement("div");
@@ -1059,6 +1198,50 @@ function showToast(message, type = "info") {
         toast.style.transition = "all 0.25s ease";
         setTimeout(() => toast.remove(), 250);
     }, 2800);
+}
+
+function openCustomModal({ title, bodyHtml, confirmText = "Підтвердити", confirmClass = "btn-primary", onConfirm }) {
+    const modal = document.getElementById("customModal");
+    const titleEl = document.getElementById("modalTitle");
+    const bodyEl = document.getElementById("modalBody");
+    const btnCancel = document.getElementById("modalBtnCancel");
+    const btnConfirm = document.getElementById("modalBtnConfirm");
+
+    titleEl.innerHTML = title;
+    bodyEl.innerHTML = bodyHtml;
+    btnConfirm.textContent = confirmText;
+    btnConfirm.className = confirmClass;
+
+    const closeModal = () => {
+        modal.classList.remove("active");
+        btnConfirm.onclick = null;
+        btnCancel.onclick = null;
+    };
+
+    btnCancel.onclick = closeModal;
+    btnConfirm.onclick = () => {
+        if (onConfirm) onConfirm();
+        closeModal();
+    };
+
+    modal.classList.add("active");
+
+    // Focus input if present
+    setTimeout(() => {
+        const inp = bodyEl.querySelector("input");
+        if (inp) {
+            inp.focus();
+            inp.select();
+            inp.onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    if (onConfirm) onConfirm();
+                    closeModal();
+                } else if (e.key === "Escape") {
+                    closeModal();
+                }
+            };
+        }
+    }, 100);
 }
 
 function getPlayerName(p) {
@@ -1082,52 +1265,110 @@ function getActivePlayers() {
 
 
 /* ============================================================
-   ROTATION ENGINE: SMART BENCH UPDATES & FAIR ROTATION
+   PERMANENT CORE PAIRS ROTATION WITH BALANCED TEMPORARY SWINGER
 ============================================================ */
 
-function rebuildRotation() {
+function extractCorePairs() {
     const active = getActivePlayers();
-    if (active.length < 4) {
+    if (active.length < 4) return { corePairs: [], swinger: null };
+
+    const pairMap = {};
+    const unassigned = [];
+    let explicitSwinger = null;
+
+    active.forEach(name => {
+        const pObj = state.players.find(p => getPlayerName(p) === name);
+        const pId = pObj ? pObj.pairId : "auto";
+        if (pId === "swinger") {
+            explicitSwinger = name;
+        } else if (pId && pId !== "auto") {
+            if (!pairMap[pId]) pairMap[pId] = [];
+            pairMap[pId].push(name);
+        } else {
+            unassigned.push(name);
+        }
+    });
+
+    const fullPairs = [];
+    const partial = [];
+
+    Object.keys(pairMap).sort((a, b) => parseInt(a, 10) - parseInt(b, 10)).forEach(k => {
+        const list = pairMap[k];
+        while (list.length >= 2) {
+            fullPairs.push([list.shift(), list.shift()]);
+        }
+        if (list.length === 1) {
+            partial.push(list.shift());
+        }
+    });
+
+    const pool = [...partial, ...unassigned];
+    while (pool.length >= 2) {
+        fullPairs.push([pool.shift(), pool.shift()]);
+    }
+
+    let swinger = explicitSwinger;
+    if (pool.length === 1) {
+        if (!swinger) {
+            swinger = pool.shift();
+        } else {
+            fullPairs.push([swinger, pool.shift()]);
+            swinger = null;
+        }
+    }
+
+    if (active.length % 2 === 0 && swinger) {
+        const flat = [...fullPairs.flat(), swinger];
+        fullPairs.length = 0;
+        for (let i = 0; i < flat.length; i += 2) {
+            fullPairs.push([flat[i], flat[i + 1]]);
+        }
+        swinger = null;
+    } else if (active.length % 2 !== 0 && !swinger && fullPairs.length > 0) {
+        const lastP = fullPairs.pop();
+        fullPairs.push([lastP[0], null]);
+        swinger = lastP[1];
+        fullPairs.pop();
+    }
+
+    return { corePairs: fullPairs, swinger: swinger };
+}
+
+function rebuildRotation() {
+    const { corePairs, swinger } = extractCorePairs();
+    const active = getActivePlayers();
+
+    if (active.length < 4 || corePairs.length < 2) {
         state.rotation = {
-            pairs: [],
-            pairsQueue: [],
+            corePairs: [],
+            pairQueue: [],
             swinger: null,
+            swingerNextPairIdx: 0,
             tableA: null,
             tableB: null,
-            isFirstMatch: true,
-            lastRestedWasP0: false
+            isFirstMatch: true
         };
         save();
         render();
         return;
     }
 
-    const pool = [...active];
-    let swinger = null;
-    if (pool.length % 2 !== 0) {
-        swinger = pool.pop();
-    }
+    const tableA = { coreIdx: 0, currentPlayers: [...corePairs[0]], games: 0, withSwinger: false };
+    const tableB = { coreIdx: 1, currentPlayers: [...corePairs[1]], games: 0, withSwinger: false };
 
-    const pairs = [];
-    for (let i = 0; i < pool.length; i += 2) {
-        pairs.push([pool[i], pool[i + 1]]);
-    }
-
-    const tableA = { players: [...pairs[0]], games: 0, pairIdx: 0 };
-    const tableB = { players: [...pairs[1]], games: 0, pairIdx: 1 };
-    const pairsQueue = [];
-    for (let i = 2; i < pairs.length; i++) {
-        pairsQueue.push(i);
+    const pairQueue = [];
+    for (let i = 2; i < corePairs.length; i++) {
+        pairQueue.push(i);
     }
 
     state.rotation = {
-        pairs: pairs,
-        pairsQueue: pairsQueue,
+        corePairs: corePairs,
+        pairQueue: pairQueue,
         swinger: swinger,
+        swingerNextPairIdx: 0,
         tableA: tableA,
         tableB: tableB,
-        isFirstMatch: true,
-        lastRestedWasP0: false
+        isFirstMatch: true
     };
 
     save();
@@ -1136,48 +1377,31 @@ function rebuildRotation() {
 
 function updateBench() {
     const rot = state.rotation;
-    
-    // If table is not initialized, build from scratch
     if (!rot || !rot.tableA || !rot.tableB) {
         rebuildRotation();
         return;
     }
 
+    const { corePairs, swinger } = extractCorePairs();
     const active = getActivePlayers();
-    const tablePlayers = [...rot.tableA.players, ...rot.tableB.players];
+    const tablePlayers = [...rot.tableA.currentPlayers, ...rot.tableB.currentPlayers];
 
-    // If active players < 4 or one of table players was paused/removed, rebuild table
     if (active.length < 4 || !tablePlayers.every(p => active.includes(p))) {
         rebuildRotation();
         return;
     }
 
-    // Otherwise, smoothly update ONLY the bench without disturbing live match!
-    const benchPlayers = active.filter(p => !tablePlayers.includes(p));
-
-    let swinger = null;
-    if (benchPlayers.length % 2 !== 0) {
-        swinger = benchPlayers.pop();
-    }
-
-    const newPairs = [];
-    newPairs[rot.tableA.pairIdx] = [...rot.tableA.players];
-    newPairs[rot.tableB.pairIdx] = [...rot.tableB.players];
-
-    const pairsQueue = [];
-    let nextPairIdx = 0;
-
-    for (let i = 0; i < benchPlayers.length; i += 2) {
-        while (newPairs[nextPairIdx] !== undefined) {
-            nextPairIdx++;
-        }
-        newPairs[nextPairIdx] = [benchPlayers[i], benchPlayers[i + 1]];
-        pairsQueue.push(nextPairIdx);
-    }
-
-    rot.pairs = newPairs;
-    rot.pairsQueue = pairsQueue;
+    rot.corePairs = corePairs;
     rot.swinger = swinger;
+
+    const currentTableIndices = [rot.tableA.coreIdx, rot.tableB.coreIdx];
+    const available = [];
+    for (let i = 0; i < corePairs.length; i++) {
+        if (!currentTableIndices.includes(i)) {
+            available.push(i);
+        }
+    }
+    rot.pairQueue = available;
 }
 
 function ensureTableReady() {
@@ -1185,75 +1409,71 @@ function ensureTableReady() {
     if (active.length < 4) return;
 
     const rot = state.rotation;
-    if (!rot || !rot.tableA || !rot.tableB || !rot.pairs || !rot.pairs.length) {
+    if (!rot || !rot.tableA || !rot.tableB || !rot.corePairs || !rot.corePairs.length) {
         rebuildRotation();
         return;
     }
 
-    const currentTablePlayers = [...rot.tableA.players, ...rot.tableB.players];
+    const currentTablePlayers = [...rot.tableA.currentPlayers, ...rot.tableB.currentPlayers];
     if (!currentTablePlayers.every(p => active.includes(p))) {
         rebuildRotation();
     }
 }
 
-function getNextIncomingTeam(leavingTeam) {
+function getNextIncomingTeam(leavingCoreIdx) {
     const stats = calculateStats(state.days[state.currentDay]);
     const rot = state.rotation;
+    const corePairs = rot.corePairs || [];
+    const swinger = rot.swinger;
 
-    if (!Array.isArray(rot.pairs)) rot.pairs = [];
-    if (!Array.isArray(rot.pairsQueue)) rot.pairsQueue = [];
+    if (!Array.isArray(rot.pairQueue)) rot.pairQueue = [];
 
-    const leavingPairIdx = (leavingTeam && typeof leavingTeam.pairIdx === 'number') ? leavingTeam.pairIdx : 0;
-    rot.pairs[leavingPairIdx] = leavingTeam ? [...leavingTeam.players] : (rot.pairs[0] || []);
-    rot.pairsQueue.push(leavingPairIdx);
-
-    let nextIdx = rot.pairsQueue.shift();
-    if (nextIdx === undefined || !rot.pairs[nextIdx]) {
-        nextIdx = 0;
+    if (typeof leavingCoreIdx === 'number' && !rot.pairQueue.includes(leavingCoreIdx)) {
+        rot.pairQueue.push(leavingCoreIdx);
     }
 
-    let incomingPair = rot.pairs[nextIdx] ? [...rot.pairs[nextIdx]] : (leavingTeam ? [...leavingTeam.players] : []);
-
-    // Fair swinger substitution with alternating tie-breaker
-    if (rot.swinger && incomingPair.length >= 2) {
-        const p0 = incomingPair[0];
-        const p1 = incomingPair[1];
-        const games0 = stats[p0] ? stats[p0].games : 0;
-        const games1 = stats[p1] ? stats[p1].games : 0;
-
-        let playerToRest;
-        let actualPlayers;
-
-        if (games0 > games1) {
-            playerToRest = p0;
-            actualPlayers = [rot.swinger, p1];
-        } else if (games1 > games0) {
-            playerToRest = p1;
-            actualPlayers = [p0, rot.swinger];
-        } else {
-            // Strict alternating tie-breaker
-            if (!rot.lastRestedWasP0) {
-                playerToRest = p0;
-                actualPlayers = [rot.swinger, p1];
-                rot.lastRestedWasP0 = true;
-            } else {
-                playerToRest = p1;
-                actualPlayers = [p0, rot.swinger];
-                rot.lastRestedWasP0 = false;
+    let nextCoreIdx = rot.pairQueue.shift();
+    if (nextCoreIdx === undefined || !corePairs[nextCoreIdx]) {
+        const onTable = [rot.tableA ? rot.tableA.coreIdx : -1, rot.tableB ? rot.tableB.coreIdx : -1];
+        for (let i = 0; i < corePairs.length; i++) {
+            if (!onTable.includes(i)) {
+                nextCoreIdx = i;
+                break;
             }
         }
+        if (nextCoreIdx === undefined) nextCoreIdx = 0;
+    }
 
-        rot.swinger = playerToRest;
-        incomingPair = actualPlayers;
+    const nextCore = corePairs[nextCoreIdx] || ["Гравець 1", "Гравець 2"];
 
-        // Instant synchronization of pair composition
-        rot.pairs[nextIdx] = [...incomingPair];
+    let useSwinger = false;
+    if (swinger) {
+        const statsList = Object.values(stats);
+        const avgGames = statsList.length ? statsList.reduce((s, x) => s + x.games, 0) / statsList.length : 0;
+        const swingerGames = stats[swinger] ? stats[swinger].games : 0;
+        
+        if (nextCoreIdx === rot.swingerNextPairIdx && swingerGames <= avgGames + 0.5) {
+            useSwinger = true;
+            rot.swingerNextPairIdx = (rot.swingerNextPairIdx + 1) % corePairs.length;
+        } else if (nextCoreIdx === rot.swingerNextPairIdx) {
+            rot.swingerNextPairIdx = (rot.swingerNextPairIdx + 1) % corePairs.length;
+        }
+    }
+
+    let incomingPlayers;
+    if (useSwinger) {
+        // Game 1: Swinger + Partner 0 (Partner 1 rests)
+        incomingPlayers = [swinger, nextCore[0]];
+    } else {
+        // Pure Core Pair
+        incomingPlayers = [...nextCore];
     }
 
     return {
-        players: incomingPair,
+        coreIdx: nextCoreIdx,
+        currentPlayers: incomingPlayers,
         games: 0,
-        pairIdx: nextIdx
+        withSwinger: useSwinger
     };
 }
 
@@ -1271,35 +1491,50 @@ function recordResult(winnerTeamCode) {
     state.undoStack.push(snapshot);
     if (state.undoStack.length > 30) state.undoStack.shift();
 
-    // Record match
     const matchRecord = {
         id: Date.now(),
         time: new Date().toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" }),
-        teamA: [...rot.tableA.players],
-        teamB: [...rot.tableB.players],
+        teamA: [...rot.tableA.currentPlayers],
+        teamB: [...rot.tableB.currentPlayers],
         winner: winnerTeamCode
     };
     state.days[state.currentDay].push(matchRecord);
 
-    const winnerNames = winnerTeamCode === "A" ? rot.tableA.players.join(" + ") : rot.tableB.players.join(" + ");
+    const winnerNames = winnerTeamCode === "A" ? rot.tableA.currentPlayers.join(" + ") : rot.tableB.currentPlayers.join(" + ");
     showToast(`🏆 ${winnerNames} перемогли!`, "success");
 
     if (rot.isFirstMatch) {
         rot.isFirstMatch = false;
         if (winnerTeamCode === "A") {
             rot.tableA.games = 1;
-            rot.tableB = getNextIncomingTeam(rot.tableB);
+            const leavingIdx = rot.tableB.coreIdx;
+            rot.tableB = getNextIncomingTeam(leavingIdx);
         } else {
             rot.tableB.games = 1;
-            rot.tableA = getNextIncomingTeam(rot.tableA);
+            const leavingIdx = rot.tableA.coreIdx;
+            rot.tableA = getNextIncomingTeam(leavingIdx);
         }
     } else {
         if (rot.tableA.games >= 1) {
             rot.tableB.games = 1;
-            rot.tableA = getNextIncomingTeam(rot.tableA);
+            if (rot.tableB.withSwinger && rot.swinger) {
+                const core = rot.corePairs[rot.tableB.coreIdx];
+                if (core && core.length === 2) {
+                    rot.tableB.currentPlayers = [rot.swinger, core[1]];
+                }
+            }
+            const leavingIdx = rot.tableA.coreIdx;
+            rot.tableA = getNextIncomingTeam(leavingIdx);
         } else {
             rot.tableA.games = 1;
-            rot.tableB = getNextIncomingTeam(rot.tableB);
+            if (rot.tableA.withSwinger && rot.swinger) {
+                const core = rot.corePairs[rot.tableA.coreIdx];
+                if (core && core.length === 2) {
+                    rot.tableA.currentPlayers = [rot.swinger, core[1]];
+                }
+            }
+            const leavingIdx = rot.tableB.coreIdx;
+            rot.tableB = getNextIncomingTeam(leavingIdx);
         }
     }
 
@@ -1309,9 +1544,7 @@ function recordResult(winnerTeamCode) {
 
 function undoLastMatch() {
     if (!state.undoStack.length) return;
-
-    const snapshotRaw = state.undoStack.pop();
-    const snapshot = JSON.parse(snapshotRaw);
+    const snapshot = JSON.parse(state.undoStack.pop());
 
     if (state.days[snapshot.matchDay]) {
         state.days[snapshot.matchDay].length = snapshot.matchesLength;
@@ -1320,14 +1553,14 @@ function undoLastMatch() {
     state.rotation = snapshot.rotation;
     save();
     render();
-    showToast("↩️ Останній результат скасовано", "info");
+    showToast("↩️ Результат скасовано", "info");
 }
 
 function deleteMatch(day, matchIndex) {
     state.days[day].splice(matchIndex, 1);
     save();
     render();
-    showToast("Матч видалено з історії", "info");
+    showToast("Матч видалено", "info");
 }
 
 function simulateMatches(count) {
@@ -1339,68 +1572,126 @@ function simulateMatches(count) {
 
 
 /* ============================================================
-   PLAYERS MANAGEMENT & RENAME
+   PLAYERS & CUSTOM PAIRS BUILDER
 ============================================================ */
 
 function addPlayer() {
     const input = document.getElementById("playerInput");
+    const select = document.getElementById("pairSelectDropdown");
     const name = input.value.trim();
     if (!name) return;
 
     const exists = state.players.some(p => getPlayerName(p).toLowerCase() === name.toLowerCase());
     if (exists) {
-        showToast("Гравець з таким ім'ям вже є у списку", "error");
+        showToast("Гравець з таким ім'ям вже є", "error");
         return;
     }
 
-    state.players.push({ name: name, paused: false });
+    let targetPair = select.value;
+    let finalPairId = 1;
+
+    if (targetPair === "swinger") {
+        finalPairId = "swinger";
+    } else if (targetPair === "auto") {
+        const pairCounts = {};
+        state.players.forEach(p => {
+            if (p.pairId !== "swinger") {
+                pairCounts[p.pairId] = (pairCounts[p.pairId] || 0) + 1;
+            }
+        });
+
+        let foundPair = null;
+        for (let i = 1; i <= 20; i++) {
+            if (!pairCounts[i] || pairCounts[i] < 2) {
+                foundPair = i;
+                break;
+            }
+        }
+        finalPairId = foundPair || 1;
+    } else {
+        finalPairId = parseInt(targetPair, 10);
+    }
+
+    state.players.push({ name: name, paused: false, pairId: finalPairId });
     input.value = "";
 
-    updateBench();
+    rebuildRotation();
     save();
     render();
-    showToast(`Гравця ${name} додано`, "success");
+    showToast(`Гравця ${name} додано до ${finalPairId === 'swinger' ? 'Свінгера' : 'Пари #' + finalPairId}!`, "success");
 }
 
-function renamePlayer(oldName) {
-    const newName = prompt(`Введіть нове ім'я для ${oldName}:`, oldName);
-    if (!newName || !newName.trim() || newName.trim() === oldName) return;
-
-    const cleanName = newName.trim();
-    if (state.players.some(p => getPlayerName(p).toLowerCase() === cleanName.toLowerCase())) {
-        showToast("Гравець з таким ім'ям вже існує", "error");
-        return;
+function setPlayerPair(name, newPairId) {
+    const p = state.players.find(x => getPlayerName(x) === name);
+    if (p) {
+        p.pairId = newPairId === "swinger" ? "swinger" : parseInt(newPairId, 10);
+        rebuildRotation();
+        save();
+        render();
+        showToast(`${name} переміщено до ${newPairId === 'swinger' ? 'Свінгера' : 'Пари #' + newPairId}`, "info");
     }
+}
 
-    // Update in players
-    state.players.forEach(p => {
-        if (getPlayerName(p) === oldName) {
-            p.name = cleanName;
-        }
+function autoBalancePairs() {
+    state.players.forEach((p, idx) => {
+        p.pairId = Math.floor(idx / 2) + 1;
     });
 
-    // Update in active rotation
-    const rot = state.rotation;
-    if (rot) {
-        if (rot.swinger === oldName) rot.swinger = cleanName;
-        if (rot.tableA) rot.tableA.players = rot.tableA.players.map(p => p === oldName ? cleanName : p);
-        if (rot.tableB) rot.tableB.players = rot.tableB.players.map(p => p === oldName ? cleanName : p);
-        if (Array.isArray(rot.pairs)) {
-            rot.pairs = rot.pairs.map(pair => pair.map(p => p === oldName ? cleanName : p));
-        }
+    if (state.players.length % 2 !== 0) {
+        state.players[state.players.length - 1].pairId = "swinger";
     }
 
-    // Update in match history
-    DAYS.forEach(day => {
-        (state.days[day] || []).forEach(m => {
-            m.teamA = m.teamA.map(p => p === oldName ? cleanName : p);
-            m.teamB = m.teamB.map(p => p === oldName ? cleanName : p);
-        });
-    });
-
+    rebuildRotation();
     save();
     render();
-    showToast(`Ім'я змінено на ${cleanName}`, "success");
+    showToast("Пари авто-розподілено!", "success");
+}
+
+function renamePlayerModal(oldName) {
+    openCustomModal({
+        title: "✏️ Перейменувати гравця",
+        bodyHtml: `
+            <div>Введіть нове ім'я для <strong>${escapeHtml(oldName)}</strong>:</div>
+            <input id="modalRenameInput" class="modal-input" type="text" value="${escapeHtml(oldName)}">
+        `,
+        confirmText: "Зберегти",
+        onConfirm: () => {
+            const input = document.getElementById("modalRenameInput");
+            if (!input) return;
+            const newName = input.value.trim();
+            if (!newName || newName === oldName) return;
+
+            if (state.players.some(p => getPlayerName(p).toLowerCase() === newName.toLowerCase())) {
+                showToast("Гравець з таким ім'ям вже існує", "error");
+                return;
+            }
+
+            state.players.forEach(p => {
+                if (getPlayerName(p) === oldName) p.name = newName;
+            });
+
+            const rot = state.rotation;
+            if (rot) {
+                if (rot.swinger === oldName) rot.swinger = newName;
+                if (rot.tableA) rot.tableA.currentPlayers = rot.tableA.currentPlayers.map(p => p === oldName ? newName : p);
+                if (rot.tableB) rot.tableB.currentPlayers = rot.tableB.currentPlayers.map(p => p === oldName ? newName : p);
+                if (Array.isArray(rot.corePairs)) {
+                    rot.corePairs = rot.corePairs.map(pair => pair.map(p => p === oldName ? newName : p));
+                }
+            }
+
+            DAYS.forEach(day => {
+                (state.days[day] || []).forEach(m => {
+                    m.teamA = m.teamA.map(p => p === oldName ? newName : p);
+                    m.teamB = m.teamB.map(p => p === oldName ? newName : p);
+                });
+            });
+
+            save();
+            render();
+            showToast(`Ім'я змінено на ${newName}`, "success");
+        }
+    });
 }
 
 function togglePlayerPause(name) {
@@ -1408,36 +1699,58 @@ function togglePlayerPause(name) {
     if (idx !== -1) {
         const current = state.players[idx];
         const isPaused = isPlayerPaused(current);
-        state.players[idx] = { name: name, paused: !isPaused };
+        state.players[idx] = { ...current, paused: !isPaused };
         updateBench();
         save();
         render();
-        showToast(`${name} ${!isPaused ? 'поставлено на паузу ⏸️' : 'повернуто в гру 🟢'}`, "info");
+        showToast(`${name} ${!isPaused ? 'на паузі ⏸️' : 'в грі 🟢'}`, "info");
     }
 }
 
-function removePlayer(name) {
-    if (!confirm(`Видалити гравця ${name}? (Якщо він зараз грає за столом, матч буде оновлено)`)) return;
-    state.players = state.players.filter(p => getPlayerName(p) !== name);
-    updateBench();
-    save();
-    render();
-    showToast(`Гравця ${name} видалено`, "info");
-}
-
-function addDemoPlayers() {
-    const demo = ["Боря", "Даня", "Тьома", "Нацик", "Андрій", "Яніс", "Льоха"];
-    demo.forEach(d => {
-        const exists = state.players.some(p => getPlayerName(p) === d);
-        if (!exists) {
-            state.players.push({ name: d, paused: false });
+function removePlayerModal(name) {
+    openCustomModal({
+        title: "🗑️ Видалити гравця?",
+        bodyHtml: `Ви впевнені, що хочете видалити <strong>${escapeHtml(name)}</strong> зі списку?`,
+        confirmText: "Видалити",
+        confirmClass: "btn-danger",
+        onConfirm: () => {
+            state.players = state.players.filter(p => getPlayerName(p) !== name);
+            updateBench();
+            save();
+            render();
+            showToast(`${name} видалено`, "info");
         }
     });
+}
 
-    updateBench();
+function promptResetAll() {
+    openCustomModal({
+        title: "⚠️ Скинути ВСІ дані?",
+        bodyHtml: `Увага! Всі зіграні матчі, статистика та рейтинги за всі дні тижня будуть <strong>безповоротно видалені</strong>!`,
+        confirmText: "Скинути все",
+        confirmClass: "btn-danger",
+        onConfirm: () => {
+            localStorage.removeItem("pingPongState");
+            state = JSON.parse(JSON.stringify(defaultState));
+            render();
+            showToast("Всі дані очищено", "info");
+        }
+    });
+}
+
+function addDemoPlayers(count = 7) {
+    const allDemo = ["Боря", "Даня", "Тьома", "Нацик", "Андрій", "Яніс", "Льоха", "Макуха", "Ромчик", "Вова"];
+    const toAdd = allDemo.slice(0, count);
+
+    state.players = toAdd.map((name, idx) => {
+        const pairId = (count % 2 !== 0 && idx === count - 1) ? "swinger" : Math.floor(idx / 2) + 1;
+        return { name: name, paused: false, pairId: pairId };
+    });
+
+    rebuildRotation();
     save();
     render();
-    showToast("Тестових гравців додано!", "success");
+    showToast(`Завантажено ${count} гравців!`, "success");
 }
 
 
@@ -1449,22 +1762,16 @@ function calculateStats(matches) {
     const stats = {};
     state.players.forEach(p => {
         const name = getPlayerName(p);
-        if (name) {
-            stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
-        }
+        if (name) stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
     });
 
     if (!matches) return stats;
 
     matches.forEach(m => {
-        const teamA = m.teamA;
-        const teamB = m.teamB;
-        const winner = m.winner;
-
-        teamA.forEach(name => {
+        m.teamA.forEach(name => {
             if (!stats[name]) stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
             stats[name].games++;
-            if (winner === "A") {
+            if (m.winner === "A") {
                 stats[name].wins++;
                 stats[name].points += 3;
                 stats[name].streak = stats[name].streak > 0 ? stats[name].streak + 1 : 1;
@@ -1474,10 +1781,10 @@ function calculateStats(matches) {
             }
         });
 
-        teamB.forEach(name => {
+        m.teamB.forEach(name => {
             if (!stats[name]) stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
             stats[name].games++;
-            if (winner === "B") {
+            if (m.winner === "B") {
                 stats[name].wins++;
                 stats[name].points += 3;
                 stats[name].streak = stats[name].streak > 0 ? stats[name].streak + 1 : 1;
@@ -1526,40 +1833,84 @@ function calculateDuoStats(matches) {
    RENDERING
 ============================================================ */
 
-function renderPlayers() {
-    const container = document.getElementById("playerList");
+function renderPairsBuilder() {
+    const container = document.getElementById("pairsContainer");
     const countEl = document.getElementById("playerCount");
-    const activeCountEl = document.getElementById("activePlayerCount");
-
-    const activePlayers = getActivePlayers();
     countEl.textContent = state.players.length;
-    activeCountEl.textContent = `${activePlayers.length} активних`;
 
     if (!state.players.length) {
-        container.innerHTML = `<div class="empty-state">Додайте хоча б 4 гравців для старту ротації.</div>`;
+        container.innerHTML = `<div class="empty-state">Поки немає жодного гравця. Введіть ім'я вгорі і натисніть «+ Додати».</div>`;
         return;
     }
 
-    container.innerHTML = state.players.map(p => {
-        const name = getPlayerName(p);
-        const paused = isPlayerPaused(p);
+    const groups = {};
+    state.players.forEach(p => {
+        const pId = p.pairId !== undefined ? p.pairId : 1;
+        if (!groups[pId]) groups[pId] = [];
+        groups[pId].push(p);
+    });
 
-        return `
-            <div class="player-chip ${paused ? 'paused' : ''}">
-                <span class="player-chip-name" onclick="renamePlayer('${escapeJs(name)}')" title="Натисніть, щоб перейменувати">
-                    ${paused ? '⏸️' : '🟢'} ${escapeHtml(name)} ✏️
-                </span>
-                <div class="player-chip-actions">
-                    <button type="button" class="chip-btn" onclick="togglePlayerPause('${escapeJs(name)}')" title="${paused ? 'Увімкнути гравця' : 'Поставити на паузу'}">
-                        ${paused ? '▶️' : '⏸️'}
-                    </button>
-                    <button type="button" class="chip-btn remove" onclick="removePlayer('${escapeJs(name)}')" title="Видалити">
-                        ×
-                    </button>
+    const pairKeys = Object.keys(groups).filter(k => k !== "swinger").sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+
+    let html = "";
+
+    pairKeys.forEach(k => {
+        const list = groups[k] || [];
+        html += `
+            <div class="pair-card">
+                <div class="pair-card-header">
+                    <span class="pair-card-title">👥 Пара #${k}</span>
+                    <span class="badge">${list.length}/2 гравці</span>
+                </div>
+                <div class="pair-players-row">
+                    ${list.map(p => renderPlayerItem(p)).join("")}
+                    ${list.length < 2 ? `<div class="player-row-item empty-slot">➕ Очікує напарника...</div>` : ''}
                 </div>
             </div>
         `;
-    }).join("");
+    });
+
+    if (groups["swinger"] && groups["swinger"].length > 0) {
+        html += `
+            <div class="pair-card swinger-card">
+                <div class="pair-card-header">
+                    <span class="pair-card-title" style="color:#e879f9">🔄 Свінгер (підміна)</span>
+                    <span class="badge badge-swinger">${groups["swinger"].length} гравець</span>
+                </div>
+                <div class="pair-players-row">
+                    ${groups["swinger"].map(p => renderPlayerItem(p)).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
+function renderPlayerItem(p) {
+    const name = getPlayerName(p);
+    const paused = isPlayerPaused(p);
+    const currentPairId = p.pairId !== undefined ? String(p.pairId) : "1";
+
+    return `
+        <div class="player-row-item ${paused ? 'paused' : ''}">
+            <span>${paused ? '⏸️' : '🟢'} <strong>${escapeHtml(name)}</strong></span>
+            <div class="player-actions-mini">
+                <select class="pair-select-mini" onchange="setPlayerPair('${escapeJs(name)}', this.value)" title="Змінити пару">
+                    <option value="1" ${currentPairId === "1" ? "selected" : ""}>Пара 1</option>
+                    <option value="2" ${currentPairId === "2" ? "selected" : ""}>Пара 2</option>
+                    <option value="3" ${currentPairId === "3" ? "selected" : ""}>Пара 3</option>
+                    <option value="4" ${currentPairId === "4" ? "selected" : ""}>Пара 4</option>
+                    <option value="5" ${currentPairId === "5" ? "selected" : ""}>Пара 5</option>
+                    <option value="6" ${currentPairId === "6" ? "selected" : ""}>Пара 6</option>
+                    <option value="swinger" ${currentPairId === "swinger" ? "selected" : ""}>Свінгер</option>
+                </select>
+                <button type="button" class="mini-btn" onclick="renamePlayerModal('${escapeJs(name)}')" title="Перейменувати">✏️</button>
+                <button type="button" class="mini-btn" onclick="togglePlayerPause('${escapeJs(name)}')" title="Пауза">${paused ? '▶️' : '⏸️'}</button>
+                <button type="button" class="mini-btn remove" onclick="removePlayerModal('${escapeJs(name)}')" title="Видалити">×</button>
+            </div>
+        </div>
+    `;
 }
 
 function renderMatch() {
@@ -1570,7 +1921,7 @@ function renderMatch() {
     if (state.undoStack.length > 0) {
         undoContainer.innerHTML = `
             <button class="btn-undo" onclick="undoLastMatch()">
-                ↩️ Скасувати останній результат
+                ↩️ Скасувати
             </button>
         `;
     } else {
@@ -1580,8 +1931,8 @@ function renderMatch() {
     if (active.length < 4) {
         container.innerHTML = `
             <div class="empty-state">
-                Для гри потрібно мінімум <strong>4 активні гравці</strong>.<br>
-                Зараз активних: ${active.length}.
+                Для гри потрібно мінімум <strong>4 активні гравці</strong> (зараз: ${active.length}).<br>
+                Додайте ще ${4 - active.length} гравців, щоб розпочати турнір.
             </div>
         `;
         return;
@@ -1604,47 +1955,45 @@ function renderMatch() {
 
     let hintText = "";
     if (rot.isFirstMatch) {
-        hintText = "⚡ <strong>Перший матч сесії</strong>: переможець залишається на 2-гу гру, програвший виходить зі столу.";
+        hintText = "⚡ <strong>Перший матч сесії</strong>: переможець залишається на 2-гу гру, програвший виходить у чергу.";
     } else {
-        const leaving = teamA.games >= 1 ? teamA.players.join(" + ") : teamB.players.join(" + ");
-        const staying = teamA.games >= 1 ? teamB.players.join(" + ") : teamA.players.join(" + ");
-        hintText = `🔄 Після цього матчу <strong>${escapeHtml(leaving)}</strong> виходять зі столу, а <strong>${escapeHtml(staying)}</strong> залишаються на 2-гу гру.`;
+        const leaving = teamA.games >= 1 ? teamA.currentPlayers.join(" + ") : teamB.currentPlayers.join(" + ");
+        const staying = teamA.games >= 1 ? teamB.currentPlayers.join(" + ") : teamA.currentPlayers.join(" + ");
+        hintText = `🔄 Після цього матчу <strong>${escapeHtml(leaving)}</strong> виходять зі столу, а <strong>${escapeHtml(staying)}</strong> грають 2-гу гру.`;
     }
 
     container.innerHTML = `
         <div class="match-header-info">
             <span class="match-tag">Матч #${matchCount}</span>
-            <span class="match-rules-hint">Формат: 2 гри на пару зі зсувом</span>
+            <span class="badge">${active.length} активних гравців</span>
         </div>
 
         <div class="teams-grid">
-            <!-- TEAM A -->
             <div class="team-box team-a ${gameA === 2 ? 'final-game' : ''}">
-                <div class="team-title">Команда A</div>
-                <div class="team-names">${teamA.players.map(escapeHtml).join(" + ")}</div>
+                <div class="team-title">Команда A ${teamA.withSwinger ? '⚡ (зі Свінгером)' : ''}</div>
+                <div class="team-names">${teamA.currentPlayers.map(escapeHtml).join(" + ")}</div>
                 <div class="game-pill ${gameA === 1 ? 'game-1' : 'game-2'}">
-                    ${gameA === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінальна гра (2 з 2)'}
+                    ${gameA === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінал (2 з 2)'}
                 </div>
             </div>
 
             <div class="vs-divider">VS</div>
 
-            <!-- TEAM B -->
             <div class="team-box team-b ${gameB === 2 ? 'final-game' : ''}">
-                <div class="team-title">Команда B</div>
-                <div class="team-names">${teamB.players.map(escapeHtml).join(" + ")}</div>
+                <div class="team-title">Команда B ${teamB.withSwinger ? '⚡ (зі Свінгером)' : ''}</div>
+                <div class="team-names">${teamB.currentPlayers.map(escapeHtml).join(" + ")}</div>
                 <div class="game-pill ${gameB === 1 ? 'game-1' : 'game-2'}">
-                    ${gameB === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінальна гра (2 з 2)'}
+                    ${gameB === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінал (2 з 2)'}
                 </div>
             </div>
         </div>
 
         <div class="action-buttons">
             <button class="btn-win-a" onclick="recordResult('A')">
-                🏆 ${teamA.players.map(escapeHtml).join(" + ")} перемогли
+                🏆 ${teamA.currentPlayers.map(escapeHtml).join(" + ")}
             </button>
             <button class="btn-win-b" onclick="recordResult('B')">
-                🏆 ${teamB.players.map(escapeHtml).join(" + ")} перемогли
+                🏆 ${teamB.currentPlayers.map(escapeHtml).join(" + ")}
             </button>
         </div>
 
@@ -1658,22 +2007,23 @@ function renderQueue() {
     const queueList = document.getElementById("queueList");
     const swingerList = document.getElementById("swingerList");
     const queueCount = document.getElementById("queueCount");
+    const swingerBadge = document.getElementById("swingerStatusBadge");
 
     const rot = state.rotation;
-    const pairsQueue = rot.pairsQueue || [];
-    const pairs = rot.pairs || [];
+    const pairQueue = rot.pairQueue || [];
+    const corePairs = rot.corePairs || [];
     const swinger = rot.swinger;
 
-    queueCount.textContent = pairsQueue.length;
+    queueCount.textContent = pairQueue.length;
 
-    if (!pairsQueue.length) {
-        queueList.innerHTML = `<div class="empty-state" style="padding:10px">Всі пари на столі</div>`;
+    if (!pairQueue.length) {
+        queueList.innerHTML = `<div class="empty-state" style="padding:6px">Всі пари на столі</div>`;
     } else {
-        queueList.innerHTML = pairsQueue.map((pairIdx, idx) => {
-            const pairPlayers = pairs[pairIdx] || [];
+        queueList.innerHTML = pairQueue.map((pairIdx, idx) => {
+            const pairPlayers = corePairs[pairIdx] || [];
             return `
                 <div class="queue-item">
-                    <span>#${idx + 1} · ${pairPlayers.map(escapeHtml).join(" + ")}</span>
+                    <span>#${idx + 1} · Пара #${pairIdx + 1} (${pairPlayers.map(escapeHtml).join(" + ")})</span>
                     <span class="badge">Готуються</span>
                 </div>
             `;
@@ -1681,12 +2031,14 @@ function renderQueue() {
     }
 
     if (!swinger) {
-        swingerList.innerHTML = `<div class="empty-state" style="padding:10px">Немає (парна кількість гравців)</div>`;
+        swingerBadge.textContent = "Немає (парна к-сть)";
+        swingerList.innerHTML = `<div class="empty-state" style="padding:6px">Немає (парна кількість гравців)</div>`;
     } else {
+        swingerBadge.textContent = "1 гравець";
         swingerList.innerHTML = `
             <div class="queue-item">
                 <span>🔄 <strong>${escapeHtml(swinger)}</strong></span>
-                <span class="swinger-badge">Зайде наступним</span>
+                <span class="swinger-badge">Зайде на чергу</span>
             </div>
         `;
     }
@@ -1716,7 +2068,6 @@ function renderRanking() {
 
     document.getElementById("dailyRanking").innerHTML = makeRankingTable(rows);
 
-    // Total Ranking
     const allMatches = DAYS.flatMap(day => state.days[day] || []);
     const totalStats = calculateStats(allMatches);
     const totalRows = Object.entries(totalStats).sort((a, b) => {
@@ -1725,14 +2076,13 @@ function renderRanking() {
 
     document.getElementById("totalRanking").innerHTML = makeRankingTable(totalRows);
 
-    // Duo Ranking
     const duoStats = calculateDuoStats(allMatches);
     renderDuoTable(duoStats);
 }
 
 function makeRankingTable(rows) {
     if (!rows.length || rows.every(r => r[1].games === 0)) {
-        return `<div class="empty-state">Поки що немає зіграних матчів.</div>`;
+        return `<div class="empty-state">Поки немає зіграних матчів.</div>`;
     }
 
     return `
@@ -1784,7 +2134,7 @@ function makeRankingTable(rows) {
 function renderDuoTable(duos) {
     const container = document.getElementById("duoRanking");
     if (!duos.length) {
-        container.innerHTML = `<div class="empty-state">Немає даних про пари.</div>`;
+        container.innerHTML = `<div class="empty-state">Немає даних про дуети.</div>`;
         return;
     }
 
@@ -1839,14 +2189,14 @@ function renderHistory() {
                     <span class="${isWinA ? 'history-winner' : 'history-loser'}">
                         ${isWinA ? '🏆 ' : ''}${match.teamA.map(escapeHtml).join(" + ")}
                     </span>
-                    <span style="color:var(--text-muted)">vs</span>
+                    <span style="color:var(--text-muted);font-size:11px">vs</span>
                     <span class="${!isWinA ? 'history-winner' : 'history-loser'}">
                         ${!isWinA ? '🏆 ' : ''}${match.teamB.map(escapeHtml).join(" + ")}
                     </span>
                 </div>
                 <div class="history-meta">
                     <span>${match.time}</span>
-                    <button class="btn-delete-match" onclick="deleteMatch('${historyDay}', ${matchIndex})" title="Видалити матч">
+                    <button class="btn-delete-match" onclick="deleteMatch('${historyDay}', ${matchIndex})" title="Видалити">
                         🗑️
                     </button>
                 </div>
@@ -1892,7 +2242,7 @@ function exportData() {
     dlAnchor.setAttribute("href", dataStr);
     dlAnchor.setAttribute("download", `ping_pong_backup_${new Date().toISOString().slice(0,10)}.json`);
     dlAnchor.click();
-    showToast("💾 Дані успішно експортовано!", "success");
+    showToast("💾 Дані експортовано!", "success");
 }
 
 function importData() {
@@ -1910,23 +2260,15 @@ function handleFileImport(e) {
                 state = imported;
                 save();
                 render();
-                showToast("Дані успішно імпортовано!", "success");
+                showToast("Дані імпортовано!", "success");
             } else {
-                showToast("Невірний формат файлу JSON", "error");
+                showToast("Невірний формат JSON", "error");
             }
         } catch (err) {
-            showToast("Помилка читання JSON файлу", "error");
+            showToast("Помилка читання JSON", "error");
         }
     };
     reader.readAsText(file);
-}
-
-function resetAll() {
-    if (!confirm("⚠️ ВИ ВПЕВНЕНІ? Всі результати, матчі та історія за всі дні будуть БЕЗПОВОРОТНО видалені!")) return;
-    localStorage.removeItem("pingPongState");
-    state = JSON.parse(JSON.stringify(defaultState));
-    render();
-    showToast("Всі дані очищено", "info");
 }
 
 
@@ -1936,7 +2278,7 @@ function resetAll() {
 
 function render() {
     document.getElementById("daySelect").value = state.currentDay;
-    renderPlayers();
+    renderPairsBuilder();
     renderMatch();
     renderQueue();
     renderSummary();
