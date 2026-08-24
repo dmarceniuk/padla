@@ -448,6 +448,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
         font-size: 13px;
         font-weight: 600;
     }
@@ -1007,15 +1009,9 @@
         <div id="pairsContainer" class="pairs-grid"></div>
 
         <div class="controls-row">
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(6)">➕ 6 гравців (3 пари)</button>
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(7)">➕ 7 гравців (3 пари + 1)</button>
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(8)">➕ 8 гравців (4 пари)</button>
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(9)">➕ 9 гравців (4 пари + 1)</button>
-            <button class="btn-secondary btn-sm" onclick="addDemoPlayers(10)">➕ 10 гравців (5 пар)</button>
-            <button class="btn-secondary btn-sm" onclick="simulateMatches(10)">🎲 +10 матчів</button>
-            <button class="btn-secondary btn-sm" onclick="exportData()">💾 Експорт</button>
-            <button class="btn-secondary btn-sm" onclick="importData()">📥 Імпорт</button>
-            <button class="btn-danger btn-sm" onclick="promptResetAll()">⚠️ Скинути все</button>
+            <button class="btn-secondary btn-sm" onclick="exportData()">💾 Експорт турніру (JSON)</button>
+            <button class="btn-secondary btn-sm" onclick="importData()">📥 Імпорт турніру (JSON)</button>
+            <button class="btn-danger btn-sm" onclick="promptResetAll()">⚠️ Очистити турнір</button>
         </div>
     </section>
 
@@ -1420,7 +1416,7 @@ function ensureTableReady() {
     }
 }
 
-function getNextIncomingTeam(leavingCoreIdx) {
+function getNextIncomingTeam(leavingCoreIdx, targetTableSide) {
     const stats = calculateStats(state.days[state.currentDay]);
     const rot = state.rotation;
     const corePairs = rot.corePairs || [];
@@ -1432,11 +1428,15 @@ function getNextIncomingTeam(leavingCoreIdx) {
         rot.pairQueue.push(leavingCoreIdx);
     }
 
+    // Determine other table to prevent swinger on both sides
+    const otherTable = targetTableSide === "A" ? rot.tableB : rot.tableA;
+    const otherOnTableCoreIdx = otherTable ? otherTable.coreIdx : -1;
+    const otherHasSwinger = otherTable ? (otherTable.withSwinger || (otherTable.currentPlayers && otherTable.currentPlayers.includes(swinger))) : false;
+
     let nextCoreIdx = rot.pairQueue.shift();
-    if (nextCoreIdx === undefined || !corePairs[nextCoreIdx]) {
-        const onTable = [rot.tableA ? rot.tableA.coreIdx : -1, rot.tableB ? rot.tableB.coreIdx : -1];
+    if (nextCoreIdx === undefined || !corePairs[nextCoreIdx] || nextCoreIdx === otherOnTableCoreIdx) {
         for (let i = 0; i < corePairs.length; i++) {
-            if (!onTable.includes(i)) {
+            if (i !== otherOnTableCoreIdx) {
                 nextCoreIdx = i;
                 break;
             }
@@ -1447,7 +1447,7 @@ function getNextIncomingTeam(leavingCoreIdx) {
     const nextCore = corePairs[nextCoreIdx] || ["Гравець 1", "Гравець 2"];
 
     let useSwinger = false;
-    if (swinger) {
+    if (swinger && !otherHasSwinger) {
         const statsList = Object.values(stats);
         const avgGames = statsList.length ? statsList.reduce((s, x) => s + x.games, 0) / statsList.length : 0;
         const swingerGames = stats[swinger] ? stats[swinger].games : 0;
@@ -1482,6 +1482,11 @@ function recordResult(winnerTeamCode) {
     const rot = state.rotation;
     if (!rot.tableA || !rot.tableB) return;
 
+    // Haptic feedback on phones
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+        try { navigator.vibrate(40); } catch (e) {}
+    }
+
     // Snapshot for Undo
     const snapshot = JSON.stringify({
         rotation: JSON.parse(JSON.stringify(state.rotation)),
@@ -1508,11 +1513,11 @@ function recordResult(winnerTeamCode) {
         if (winnerTeamCode === "A") {
             rot.tableA.games = 1;
             const leavingIdx = rot.tableB.coreIdx;
-            rot.tableB = getNextIncomingTeam(leavingIdx);
+            rot.tableB = getNextIncomingTeam(leavingIdx, "B");
         } else {
             rot.tableB.games = 1;
             const leavingIdx = rot.tableA.coreIdx;
-            rot.tableA = getNextIncomingTeam(leavingIdx);
+            rot.tableA = getNextIncomingTeam(leavingIdx, "A");
         }
     } else {
         if (rot.tableA.games >= 1) {
@@ -1520,21 +1525,25 @@ function recordResult(winnerTeamCode) {
             if (rot.tableB.withSwinger && rot.swinger) {
                 const core = rot.corePairs[rot.tableB.coreIdx];
                 if (core && core.length === 2) {
-                    rot.tableB.currentPlayers = [rot.swinger, core[1]];
+                    const activePartner = rot.tableB.currentPlayers.find(p => p !== rot.swinger);
+                    const restedPartner = core.find(p => p !== activePartner) || core[1];
+                    rot.tableB.currentPlayers = [rot.swinger, restedPartner];
                 }
             }
             const leavingIdx = rot.tableA.coreIdx;
-            rot.tableA = getNextIncomingTeam(leavingIdx);
+            rot.tableA = getNextIncomingTeam(leavingIdx, "A");
         } else {
             rot.tableA.games = 1;
             if (rot.tableA.withSwinger && rot.swinger) {
                 const core = rot.corePairs[rot.tableA.coreIdx];
                 if (core && core.length === 2) {
-                    rot.tableA.currentPlayers = [rot.swinger, core[1]];
+                    const activePartner = rot.tableA.currentPlayers.find(p => p !== rot.swinger);
+                    const restedPartner = core.find(p => p !== activePartner) || core[1];
+                    rot.tableA.currentPlayers = [rot.swinger, restedPartner];
                 }
             }
             const leavingIdx = rot.tableB.coreIdx;
-            rot.tableB = getNextIncomingTeam(leavingIdx);
+            rot.tableB = getNextIncomingTeam(leavingIdx, "B");
         }
     }
 
@@ -1557,18 +1566,21 @@ function undoLastMatch() {
 }
 
 function deleteMatch(day, matchIndex) {
-    state.days[day].splice(matchIndex, 1);
-    save();
-    render();
-    showToast("Матч видалено", "info");
+    openCustomModal({
+        title: "🗑️ Видалити матч?",
+        bodyHtml: "Ви впевнені, що хочете видалити цей результат з історії?",
+        confirmText: "Видалити",
+        confirmClass: "btn-danger",
+        onConfirm: () => {
+            state.days[day].splice(matchIndex, 1);
+            save();
+            render();
+            showToast("Матч видалено", "info");
+        }
+    });
 }
 
-function simulateMatches(count) {
-    for (let i = 0; i < count; i++) {
-        const winner = Math.random() > 0.5 ? "A" : "B";
-        recordResult(winner);
-    }
-}
+
 
 
 /* ============================================================
@@ -1738,20 +1750,6 @@ function promptResetAll() {
     });
 }
 
-function addDemoPlayers(count = 7) {
-    const allDemo = ["Боря", "Даня", "Тьома", "Нацик", "Андрій", "Яніс", "Льоха", "Макуха", "Ромчик", "Вова"];
-    const toAdd = allDemo.slice(0, count);
-
-    state.players = toAdd.map((name, idx) => {
-        const pairId = (count % 2 !== 0 && idx === count - 1) ? "swinger" : Math.floor(idx / 2) + 1;
-        return { name: name, paused: false, pairId: pairId };
-    });
-
-    rebuildRotation();
-    save();
-    render();
-    showToast(`Завантажено ${count} гравців!`, "success");
-}
 
 
 /* ============================================================
