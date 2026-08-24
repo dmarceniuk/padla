@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏓 Ping Pong Rotation — Зсув по 2 гри та Свінгер</title>
+
+<style>
+    :root {
+        --bg: #0b0f19;
+        --card: #151d2e;
+        --card-subtle: #1e293b;
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-glow: rgba(59, 130, 246, 0.25);
+        --accent: #f59e0b;
+        --green: #10b981;
+        --green-bg: rgba(16, 185, 129, 0.16);
+        --red: #ef4444;
+        --red-bg: rgba(239, 68, 68, 0.16);
+        --orange: #f97316;
+        --border: #243046;
+        --border-subtle: #1e293b;
+        --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        --radius: 16px;
+    }
+
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+        background: rgba(11, 15, 25, 0.85);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 18px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+        max-width: 1050px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .day-selector select {
+        background: #151d2e;
+        color: var(--text);
+        border: 1px solid #334155;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+        max-width: 1050px;
+        margin: 18px auto;
+        padding: 0 16px 60px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    /* CARDS */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 22px;
+        box-shadow: var(--shadow);
+        animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    h2 {
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .badge {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* BUTTONS */
+    button {
+        border: 0;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .15s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        user-select: none;
+    }
+
+    button:hover {
+        filter: brightness(1.1);
+    }
+
+    button:active {
+        transform: scale(0.96) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--card-subtle);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .btn-danger {
+        background: var(--red-bg);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+        background: var(--red);
+        color: white;
+    }
+
+    .btn-undo {
+        background: #334155;
+        color: #f1f5f9;
+        font-size: 13px;
+        padding: 8px 14px;
+        border-radius: 8px;
+    }
+
+    .btn-sm {
+        padding: 8px 14px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+
+    input, select {
+        border: 1px solid var(--border);
+        background: #0b0f19;
+        color: var(--text);
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 15px;
+        outline: none;
+        transition: border-color .15s;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    /* PLAYERS SECTION */
+    .players-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .players-input input {
+        flex: 1;
+    }
+
+    .player-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 14px 0;
+        min-height: 40px;
+    }
+
+    .player-chip {
+        background: #0f172a;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 30px;
+        padding: 6px 8px 6px 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all .15s;
+    }
+
+    .player-chip.paused {
+        opacity: 0.5;
+        border-style: dashed;
+        background: #1e293b;
+    }
+
+    .player-chip-name {
+        cursor: pointer;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+    .player-chip-name:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .player-chip-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .chip-btn {
+        background: #1e293b;
+        border: 1px solid #475569;
+        padding: 5px 8px;
+        font-size: 12px;
+        color: var(--text);
+        border-radius: 8px;
+        cursor: pointer;
+        min-width: 28px;
+        min-height: 28px;
+    }
+
+    .chip-btn:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+    .chip-btn.remove:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+    }
+
+    /* CURRENT MATCH */
+    .current-match-card {
+        background: linear-gradient(180deg, #182235 0%, #0f172a 100%);
+        border: 2px solid #3b82f6;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+    }
+
+    .current-match-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #a855f7, #ec4899);
+    }
+
+    .match-header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .match-tag {
+        font-size: 13px;
+        font-weight: 800;
+        color: #93c5fd;
+        background: rgba(59, 130, 246, 0.2);
+        padding: 5px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .match-rules-hint {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .teams-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    .team-box {
+        border-radius: 16px;
+        padding: 22px 14px;
+        text-align: center;
+        border: 2px solid;
+        position: relative;
+        transition: transform .15s, box-shadow .15s;
+    }
+
+    .team-a {
+        border-color: #3b82f6;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(30, 41, 59, 0.7));
+    }
+
+    .team-b {
+        border-color: #f97316;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(30, 41, 59, 0.7));
+    }
+
+    /* Highlight team finishing 2nd game */
+    .team-box.final-game {
+        box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+    }
+
+    .team-title {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .team-a .team-title { color: #60a5fa; }
+    .team-b .team-title { color: #fb923c; }
+
+    .team-names {
+        font-size: 21px;
+        font-weight: 800;
+        color: #ffffff;
+        word-break: break-word;
+    }
+
+    .game-pill {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 14px;
+    }
+
+    .game-pill.game-1 {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.1));
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.5);
+    }
+
+    .game-pill.game-2 {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.1));
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.5);
+    }
+
+    .vs-divider {
+        font-weight: 900;
+        font-size: 16px;
+        color: var(--text-muted);
+        background: #0b0f19;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border);
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .btn-win-a {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        min-height: 54px;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-win-b {
+        background: linear-gradient(135deg, #ea580c, #c2410c);
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        min-height: 54px;
+        box-shadow: 0 6px 16px rgba(234, 88, 12, 0.35);
+    }
+
+    .rotation-status-banner {
+        margin-top: 16px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .rotation-status-banner strong {
+        color: #e2e8f0;
+    }
+
+    /* QUEUE / BENCH PREVIEW */
+    .queue-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 14px;
+    }
+
+    .queue-box {
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    .queue-title {
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .queue-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: #151d2e;
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .queue-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .swinger-badge {
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        color: white;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 12px;
+    }
+
+    /* SUMMARY CARDS */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .summary-card {
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 12px;
+        text-align: center;
+    }
+
+    .summary-val {
+        font-size: 26px;
+        font-weight: 800;
+        color: #f8fafc;
+    }
+
+    .summary-lbl {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    /* TABLES */
+    .table-responsive {
+        overflow-x: auto;
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+    }
+
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .stats-table th {
+        background: #0b0f19;
+        padding: 12px 14px;
+        color: var(--text-muted);
+        font-weight: 700;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stats-table td {
+        padding: 14px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .stats-table tr:hover td {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .rank-cell {
+        font-weight: 800;
+        color: var(--text-muted);
+        width: 36px;
+    }
+
+    .rank-1 { color: #f59e0b; }
+    .rank-2 { color: #94a3b8; }
+    .rank-3 { color: #b45309; }
+
+    .streak-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 8px;
+    }
+
+    .streak-w {
+        background: var(--green-bg);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .streak-l {
+        background: var(--red-bg);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    /* HISTORY */
+    .day-tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        margin-bottom: 14px;
+        padding-bottom: 4px;
+    }
+
+    .day-tab {
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 10px 16px;
+        border-radius: 10px;
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .day-tab.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .history-item {
+        background: #0b0f19;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .history-main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        flex-wrap: wrap;
+    }
+
+    .history-num {
+        font-weight: 800;
+        color: var(--text-muted);
+        min-width: 28px;
+    }
+
+    .history-winner {
+        color: #60a5fa;
+        font-weight: 700;
+    }
+
+    .history-loser {
+        color: var(--text-muted);
+    }
+
+    .history-meta {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-delete-match {
+        background: none;
+        color: #64748b;
+        padding: 6px;
+        font-size: 15px;
+    }
+
+    .btn-delete-match:hover {
+        color: var(--red);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 35px 10px;
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .controls-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    /* TOAST NOTIFICATIONS */
+    #toastContainer {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #1e293b;
+        border: 1px solid #475569;
+        color: #f8fafc;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: auto;
+    }
+
+    .toast.success {
+        border-color: #10b981;
+        background: #064e3b;
+    }
+
+    .toast.error {
+        border-color: #ef4444;
+        background: #7f1d1d;
+    }
+
+    .toast.info {
+        border-color: #3b82f6;
+        background: #1e3a8a;
+    }
+
+    @keyframes toastIn {
+        from { opacity: 0; transform: translateY(20px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 650px) {
+        body {
+            font-size: 14px;
+        }
+
+        .teams-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .vs-divider {
+            margin: auto;
+        }
+
+        .action-buttons {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .btn-win-a, .btn-win-b {
+            min-height: 58px;
+            font-size: 16px;
+        }
+
+        .queue-container {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .card {
+            padding: 18px 14px;
+        }
+
+        #toastContainer {
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo-title">
+            <span>🏓</span>
+            <h1>Ping Pong Rotation</h1>
+            <span class="badge">Зсув по 2 гри</span>
+        </div>
+
+        <div class="day-selector">
+            <select id="daySelect" onchange="changeDay()">
+                <option value="mon">Понеділок</option>
+                <option value="tue">Вівторок</option>
+                <option value="wed">Середа</option>
+                <option value="thu">Четвер</option>
+                <option value="fri">П'ятниця</option>
+                <option value="sat">Субота</option>
+                <option value="sun">Неділя</option>
+            </select>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <!-- CURRENT MATCH SECTION -->
+    <section id="matchCard" class="card current-match-card">
+        <div class="card-header">
+            <h2>🏓 Стіл · Зараз грають</h2>
+            <div id="matchHeaderRight"></div>
+        </div>
+
+        <div id="matchContent"></div>
+    </section>
+
+    <!-- BENCH / QUEUE PREVIEW -->
+    <section class="card">
+        <div class="card-header">
+            <h2>⏳ Лава запасних та Черга виходу</h2>
+            <button class="btn-secondary btn-sm" onclick="rebuildRotation()">🔄 Перебудувати пари</button>
+        </div>
+
+        <div class="queue-container">
+            <div class="queue-box">
+                <div class="queue-title">
+                    <span>👥 Пари в черзі на стіл</span>
+                    <span id="queueCount" class="badge">0</span>
+                </div>
+                <div id="queueList"></div>
+            </div>
+
+            <div class="queue-box">
+                <div class="queue-title">
+                    <span>🔄 Свінгер (плаваючий гравець)</span>
+                    <span class="badge">Підміна</span>
+                </div>
+                <div id="swingerList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLAYERS MANAGEMENT -->
+    <section class="card">
+        <div class="card-header">
+            <h2>👥 Гравці (<span id="playerCount">0</span>)</h2>
+            <div class="badge" id="activePlayerCount">0 активних</div>
+        </div>
+
+        <div class="players-input">
+            <input
+                id="playerInput"
+                type="text"
+                placeholder="Введіть ім'я нового гравця..."
+                onkeydown="if(event.key === 'Enter') addPlayer()"
+            >
+            <button class="btn-primary" onclick="addPlayer()">Додати</button>
+        </div>
+
+        <div id="playerList" class="player-list"></div>
+
+        <div class="controls-row">
+            <button class="btn-secondary btn-sm" onclick="addDemoPlayers()">
+                ➕ Додати 7 гравців (Боря...Льоха)
+            </button>
+            <button class="btn-secondary btn-sm" onclick="simulateMatches(10)">
+                🎲 Зімітувати 10 матчів
+            </button>
+            <button class="btn-secondary btn-sm" onclick="simulateMatches(40)">
+                🎲 Зімітувати 40 матчів
+            </button>
+            <button class="btn-secondary btn-sm" onclick="exportData()">
+                💾 Експорт JSON
+            </button>
+            <button class="btn-secondary btn-sm" onclick="importData()">
+                📥 Імпорт JSON
+            </button>
+            <button class="btn-danger btn-sm" onclick="resetAll()">
+                ⚠️ Скинути все
+            </button>
+        </div>
+    </section>
+
+    <!-- TODAY STATS SUMMARY -->
+    <section class="card">
+        <h2>📊 Підсумок дня</h2>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div id="todayMatches" class="summary-val">0</div>
+                <div class="summary-lbl">Матчів на столі</div>
+            </div>
+
+            <div class="summary-card">
+                <div id="todayGames" class="summary-val">0</div>
+                <div class="summary-lbl">Ігор гравців</div>
+            </div>
+
+            <div class="summary-card">
+                <div id="todayWins" class="summary-val">0</div>
+                <div class="summary-lbl">Перемог</div>
+            </div>
+
+            <div class="summary-card">
+                <div id="todayPlayers" class="summary-val">0</div>
+                <div class="summary-lbl">Активних гравців</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAILY RANKING -->
+    <section class="card">
+        <h2>🏆 Рейтинг гравців за день</h2>
+        <div id="dailyRanking"></div>
+    </section>
+
+    <!-- DUOS RANKING -->
+    <section class="card">
+        <h2>👥 Рейтинг зіграності дуетів (Найкращі пари)</h2>
+        <div id="duoRanking"></div>
+    </section>
+
+    <!-- TOTAL RANKING -->
+    <section class="card">
+        <h2>🌎 Загальний рейтинг за весь час</h2>
+        <div id="totalRanking"></div>
+    </section>
+
+    <!-- MATCH HISTORY -->
+    <section class="card">
+        <h2>📅 Історія матчів</h2>
+
+        <div class="day-tabs">
+            <button class="day-tab active" data-day="mon" onclick="setHistoryDay('mon')">Пн</button>
+            <button class="day-tab" data-day="tue" onclick="setHistoryDay('tue')">Вт</button>
+            <button class="day-tab" data-day="wed" onclick="setHistoryDay('wed')">Ср</button>
+            <button class="day-tab" data-day="thu" onclick="setHistoryDay('thu')">Чт</button>
+            <button class="day-tab" data-day="fri" onclick="setHistoryDay('fri')">Пт</button>
+            <button class="day-tab" data-day="sat" onclick="setHistoryDay('sat')">Сб</button>
+            <button class="day-tab" data-day="sun" onclick="setHistoryDay('sun')">Нд</button>
+        </div>
+
+        <div id="history"></div>
+    </section>
+
+</main>
+
+<div id="toastContainer"></div>
+<input type="file" id="importFileInput" style="display:none" accept=".json" onchange="handleFileImport(event)">
+
+<script>
+/* ============================================================
+   DATA STATE & ROBUST NORMALIZATION
+============================================================ */
+
+const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+
+const DAY_NAMES = {
+    mon: "Понеділок",
+    tue: "Вівторок",
+    wed: "Середа",
+    thu: "Четвер",
+    fri: "П'ятниця",
+    sat: "Субота",
+    sun: "Неділя"
+};
+
+const defaultState = {
+    players: [],
+    currentDay: "mon",
+    days: {
+        mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: []
+    },
+    rotation: {
+        pairs: [],              // Array of pairs [ ['A', 'B'], ['C', 'D'], ... ]
+        pairsQueue: [],         // Indices of pairs waiting in queue [2, ...]
+        swinger: null,          // Single player name currently swinging
+        tableA: null,           // { players: ['A', 'B'], games: 0, pairIdx: 0 }
+        tableB: null,           // { players: ['C', 'D'], games: 0, pairIdx: 1 }
+        isFirstMatch: true,
+        lastRestedWasP0: false  // Alternating tie-breaker flag
+    },
+    undoStack: []
+};
+
+let state = loadState();
+let historyDay = state.currentDay;
+
+function loadState() {
+    try {
+        const raw = localStorage.getItem("pingPongState");
+        if (!raw) return JSON.parse(JSON.stringify(defaultState));
+        const parsed = JSON.parse(raw);
+
+        let rawPlayers = Array.isArray(parsed.players) ? parsed.players : [];
+        let players = rawPlayers.map(p => {
+            if (typeof p === "string") return { name: p.trim(), paused: false };
+            if (p && typeof p === "object") return { name: (p.name || "").trim(), paused: !!p.paused };
+            return { name: String(p || "").trim(), paused: false };
+        }).filter(p => p.name !== "");
+
+        const currentDay = (parsed.currentDay && DAYS.includes(parsed.currentDay)) ? parsed.currentDay : "mon";
+        const days = parsed.days || defaultState.days;
+        DAYS.forEach(d => { if (!Array.isArray(days[d])) days[d] = []; });
+
+        return {
+            players: players,
+            currentDay: currentDay,
+            days: days,
+            rotation: parsed.rotation || defaultState.rotation,
+            undoStack: Array.isArray(parsed.undoStack) ? parsed.undoStack : []
+        };
+    } catch (e) {
+        console.error("Error loading state", e);
+        return JSON.parse(JSON.stringify(defaultState));
+    }
+}
+
+function save() {
+    localStorage.setItem("pingPongState", JSON.stringify(state));
+}
+
+function showToast(message, type = "info") {
+    const container = document.getElementById("toastContainer");
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    
+    let icon = "ℹ️";
+    if (type === "success") icon = "✅";
+    if (type === "error") icon = "⚠️";
+
+    toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(10px) scale(0.9)";
+        toast.style.transition = "all 0.25s ease";
+        setTimeout(() => toast.remove(), 250);
+    }, 2800);
+}
+
+function getPlayerName(p) {
+    if (typeof p === "string") return p;
+    if (p && typeof p === "object") return p.name || "";
+    return String(p || "");
+}
+
+function isPlayerPaused(p) {
+    if (typeof p === "string") return false;
+    if (p && typeof p === "object") return !!p.paused;
+    return false;
+}
+
+function getActivePlayers() {
+    return state.players
+        .filter(p => !isPlayerPaused(p))
+        .map(p => getPlayerName(p))
+        .filter(n => n !== "");
+}
+
+
+/* ============================================================
+   ROTATION ENGINE: SMART BENCH UPDATES & FAIR ROTATION
+============================================================ */
+
+function rebuildRotation() {
+    const active = getActivePlayers();
+    if (active.length < 4) {
+        state.rotation = {
+            pairs: [],
+            pairsQueue: [],
+            swinger: null,
+            tableA: null,
+            tableB: null,
+            isFirstMatch: true,
+            lastRestedWasP0: false
+        };
+        save();
+        render();
+        return;
+    }
+
+    const pool = [...active];
+    let swinger = null;
+    if (pool.length % 2 !== 0) {
+        swinger = pool.pop();
+    }
+
+    const pairs = [];
+    for (let i = 0; i < pool.length; i += 2) {
+        pairs.push([pool[i], pool[i + 1]]);
+    }
+
+    const tableA = { players: [...pairs[0]], games: 0, pairIdx: 0 };
+    const tableB = { players: [...pairs[1]], games: 0, pairIdx: 1 };
+    const pairsQueue = [];
+    for (let i = 2; i < pairs.length; i++) {
+        pairsQueue.push(i);
+    }
+
+    state.rotation = {
+        pairs: pairs,
+        pairsQueue: pairsQueue,
+        swinger: swinger,
+        tableA: tableA,
+        tableB: tableB,
+        isFirstMatch: true,
+        lastRestedWasP0: false
+    };
+
+    save();
+    render();
+}
+
+function updateBench() {
+    const rot = state.rotation;
+    
+    // If table is not initialized, build from scratch
+    if (!rot || !rot.tableA || !rot.tableB) {
+        rebuildRotation();
+        return;
+    }
+
+    const active = getActivePlayers();
+    const tablePlayers = [...rot.tableA.players, ...rot.tableB.players];
+
+    // If active players < 4 or one of table players was paused/removed, rebuild table
+    if (active.length < 4 || !tablePlayers.every(p => active.includes(p))) {
+        rebuildRotation();
+        return;
+    }
+
+    // Otherwise, smoothly update ONLY the bench without disturbing live match!
+    const benchPlayers = active.filter(p => !tablePlayers.includes(p));
+
+    let swinger = null;
+    if (benchPlayers.length % 2 !== 0) {
+        swinger = benchPlayers.pop();
+    }
+
+    const newPairs = [];
+    newPairs[rot.tableA.pairIdx] = [...rot.tableA.players];
+    newPairs[rot.tableB.pairIdx] = [...rot.tableB.players];
+
+    const pairsQueue = [];
+    let nextPairIdx = 0;
+
+    for (let i = 0; i < benchPlayers.length; i += 2) {
+        while (newPairs[nextPairIdx] !== undefined) {
+            nextPairIdx++;
+        }
+        newPairs[nextPairIdx] = [benchPlayers[i], benchPlayers[i + 1]];
+        pairsQueue.push(nextPairIdx);
+    }
+
+    rot.pairs = newPairs;
+    rot.pairsQueue = pairsQueue;
+    rot.swinger = swinger;
+}
+
+function ensureTableReady() {
+    const active = getActivePlayers();
+    if (active.length < 4) return;
+
+    const rot = state.rotation;
+    if (!rot || !rot.tableA || !rot.tableB || !rot.pairs || !rot.pairs.length) {
+        rebuildRotation();
+        return;
+    }
+
+    const currentTablePlayers = [...rot.tableA.players, ...rot.tableB.players];
+    if (!currentTablePlayers.every(p => active.includes(p))) {
+        rebuildRotation();
+    }
+}
+
+function getNextIncomingTeam(leavingTeam) {
+    const stats = calculateStats(state.days[state.currentDay]);
+    const rot = state.rotation;
+
+    if (!Array.isArray(rot.pairs)) rot.pairs = [];
+    if (!Array.isArray(rot.pairsQueue)) rot.pairsQueue = [];
+
+    const leavingPairIdx = (leavingTeam && typeof leavingTeam.pairIdx === 'number') ? leavingTeam.pairIdx : 0;
+    rot.pairs[leavingPairIdx] = leavingTeam ? [...leavingTeam.players] : (rot.pairs[0] || []);
+    rot.pairsQueue.push(leavingPairIdx);
+
+    let nextIdx = rot.pairsQueue.shift();
+    if (nextIdx === undefined || !rot.pairs[nextIdx]) {
+        nextIdx = 0;
+    }
+
+    let incomingPair = rot.pairs[nextIdx] ? [...rot.pairs[nextIdx]] : (leavingTeam ? [...leavingTeam.players] : []);
+
+    // Fair swinger substitution with alternating tie-breaker
+    if (rot.swinger && incomingPair.length >= 2) {
+        const p0 = incomingPair[0];
+        const p1 = incomingPair[1];
+        const games0 = stats[p0] ? stats[p0].games : 0;
+        const games1 = stats[p1] ? stats[p1].games : 0;
+
+        let playerToRest;
+        let actualPlayers;
+
+        if (games0 > games1) {
+            playerToRest = p0;
+            actualPlayers = [rot.swinger, p1];
+        } else if (games1 > games0) {
+            playerToRest = p1;
+            actualPlayers = [p0, rot.swinger];
+        } else {
+            // Strict alternating tie-breaker
+            if (!rot.lastRestedWasP0) {
+                playerToRest = p0;
+                actualPlayers = [rot.swinger, p1];
+                rot.lastRestedWasP0 = true;
+            } else {
+                playerToRest = p1;
+                actualPlayers = [p0, rot.swinger];
+                rot.lastRestedWasP0 = false;
+            }
+        }
+
+        rot.swinger = playerToRest;
+        incomingPair = actualPlayers;
+
+        // Instant synchronization of pair composition
+        rot.pairs[nextIdx] = [...incomingPair];
+    }
+
+    return {
+        players: incomingPair,
+        games: 0,
+        pairIdx: nextIdx
+    };
+}
+
+function recordResult(winnerTeamCode) {
+    ensureTableReady();
+    const rot = state.rotation;
+    if (!rot.tableA || !rot.tableB) return;
+
+    // Snapshot for Undo
+    const snapshot = JSON.stringify({
+        rotation: JSON.parse(JSON.stringify(state.rotation)),
+        matchDay: state.currentDay,
+        matchesLength: state.days[state.currentDay].length
+    });
+    state.undoStack.push(snapshot);
+    if (state.undoStack.length > 30) state.undoStack.shift();
+
+    // Record match
+    const matchRecord = {
+        id: Date.now(),
+        time: new Date().toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" }),
+        teamA: [...rot.tableA.players],
+        teamB: [...rot.tableB.players],
+        winner: winnerTeamCode
+    };
+    state.days[state.currentDay].push(matchRecord);
+
+    const winnerNames = winnerTeamCode === "A" ? rot.tableA.players.join(" + ") : rot.tableB.players.join(" + ");
+    showToast(`🏆 ${winnerNames} перемогли!`, "success");
+
+    if (rot.isFirstMatch) {
+        rot.isFirstMatch = false;
+        if (winnerTeamCode === "A") {
+            rot.tableA.games = 1;
+            rot.tableB = getNextIncomingTeam(rot.tableB);
+        } else {
+            rot.tableB.games = 1;
+            rot.tableA = getNextIncomingTeam(rot.tableA);
+        }
+    } else {
+        if (rot.tableA.games >= 1) {
+            rot.tableB.games = 1;
+            rot.tableA = getNextIncomingTeam(rot.tableA);
+        } else {
+            rot.tableA.games = 1;
+            rot.tableB = getNextIncomingTeam(rot.tableB);
+        }
+    }
+
+    save();
+    render();
+}
+
+function undoLastMatch() {
+    if (!state.undoStack.length) return;
+
+    const snapshotRaw = state.undoStack.pop();
+    const snapshot = JSON.parse(snapshotRaw);
+
+    if (state.days[snapshot.matchDay]) {
+        state.days[snapshot.matchDay].length = snapshot.matchesLength;
+    }
+
+    state.rotation = snapshot.rotation;
+    save();
+    render();
+    showToast("↩️ Останній результат скасовано", "info");
+}
+
+function deleteMatch(day, matchIndex) {
+    state.days[day].splice(matchIndex, 1);
+    save();
+    render();
+    showToast("Матч видалено з історії", "info");
+}
+
+function simulateMatches(count) {
+    for (let i = 0; i < count; i++) {
+        const winner = Math.random() > 0.5 ? "A" : "B";
+        recordResult(winner);
+    }
+}
+
+
+/* ============================================================
+   PLAYERS MANAGEMENT & RENAME
+============================================================ */
+
+function addPlayer() {
+    const input = document.getElementById("playerInput");
+    const name = input.value.trim();
+    if (!name) return;
+
+    const exists = state.players.some(p => getPlayerName(p).toLowerCase() === name.toLowerCase());
+    if (exists) {
+        showToast("Гравець з таким ім'ям вже є у списку", "error");
+        return;
+    }
+
+    state.players.push({ name: name, paused: false });
+    input.value = "";
+
+    updateBench();
+    save();
+    render();
+    showToast(`Гравця ${name} додано`, "success");
+}
+
+function renamePlayer(oldName) {
+    const newName = prompt(`Введіть нове ім'я для ${oldName}:`, oldName);
+    if (!newName || !newName.trim() || newName.trim() === oldName) return;
+
+    const cleanName = newName.trim();
+    if (state.players.some(p => getPlayerName(p).toLowerCase() === cleanName.toLowerCase())) {
+        showToast("Гравець з таким ім'ям вже існує", "error");
+        return;
+    }
+
+    // Update in players
+    state.players.forEach(p => {
+        if (getPlayerName(p) === oldName) {
+            p.name = cleanName;
+        }
+    });
+
+    // Update in active rotation
+    const rot = state.rotation;
+    if (rot) {
+        if (rot.swinger === oldName) rot.swinger = cleanName;
+        if (rot.tableA) rot.tableA.players = rot.tableA.players.map(p => p === oldName ? cleanName : p);
+        if (rot.tableB) rot.tableB.players = rot.tableB.players.map(p => p === oldName ? cleanName : p);
+        if (Array.isArray(rot.pairs)) {
+            rot.pairs = rot.pairs.map(pair => pair.map(p => p === oldName ? cleanName : p));
+        }
+    }
+
+    // Update in match history
+    DAYS.forEach(day => {
+        (state.days[day] || []).forEach(m => {
+            m.teamA = m.teamA.map(p => p === oldName ? cleanName : p);
+            m.teamB = m.teamB.map(p => p === oldName ? cleanName : p);
+        });
+    });
+
+    save();
+    render();
+    showToast(`Ім'я змінено на ${cleanName}`, "success");
+}
+
+function togglePlayerPause(name) {
+    const idx = state.players.findIndex(x => getPlayerName(x) === name);
+    if (idx !== -1) {
+        const current = state.players[idx];
+        const isPaused = isPlayerPaused(current);
+        state.players[idx] = { name: name, paused: !isPaused };
+        updateBench();
+        save();
+        render();
+        showToast(`${name} ${!isPaused ? 'поставлено на паузу ⏸️' : 'повернуто в гру 🟢'}`, "info");
+    }
+}
+
+function removePlayer(name) {
+    if (!confirm(`Видалити гравця ${name}? (Якщо він зараз грає за столом, матч буде оновлено)`)) return;
+    state.players = state.players.filter(p => getPlayerName(p) !== name);
+    updateBench();
+    save();
+    render();
+    showToast(`Гравця ${name} видалено`, "info");
+}
+
+function addDemoPlayers() {
+    const demo = ["Боря", "Даня", "Тьома", "Нацик", "Андрій", "Яніс", "Льоха"];
+    demo.forEach(d => {
+        const exists = state.players.some(p => getPlayerName(p) === d);
+        if (!exists) {
+            state.players.push({ name: d, paused: false });
+        }
+    });
+
+    updateBench();
+    save();
+    render();
+    showToast("Тестових гравців додано!", "success");
+}
+
+
+/* ============================================================
+   STATS & RANKINGS
+============================================================ */
+
+function calculateStats(matches) {
+    const stats = {};
+    state.players.forEach(p => {
+        const name = getPlayerName(p);
+        if (name) {
+            stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
+        }
+    });
+
+    if (!matches) return stats;
+
+    matches.forEach(m => {
+        const teamA = m.teamA;
+        const teamB = m.teamB;
+        const winner = m.winner;
+
+        teamA.forEach(name => {
+            if (!stats[name]) stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
+            stats[name].games++;
+            if (winner === "A") {
+                stats[name].wins++;
+                stats[name].points += 3;
+                stats[name].streak = stats[name].streak > 0 ? stats[name].streak + 1 : 1;
+            } else {
+                stats[name].losses++;
+                stats[name].streak = stats[name].streak < 0 ? stats[name].streak - 1 : -1;
+            }
+        });
+
+        teamB.forEach(name => {
+            if (!stats[name]) stats[name] = { games: 0, wins: 0, losses: 0, points: 0, streak: 0 };
+            stats[name].games++;
+            if (winner === "B") {
+                stats[name].wins++;
+                stats[name].points += 3;
+                stats[name].streak = stats[name].streak > 0 ? stats[name].streak + 1 : 1;
+            } else {
+                stats[name].losses++;
+                stats[name].streak = stats[name].streak < 0 ? stats[name].streak - 1 : -1;
+            }
+        });
+    });
+
+    return stats;
+}
+
+function calculateDuoStats(matches) {
+    const duos = {};
+    if (!matches) return [];
+
+    matches.forEach(m => {
+        [
+            { team: m.teamA, win: m.winner === "A" },
+            { team: m.teamB, win: m.winner === "B" }
+        ].forEach(t => {
+            if (t.team && t.team.length === 2) {
+                const pairKey = [...t.team].sort().join(" + ");
+                if (!duos[pairKey]) duos[pairKey] = { games: 0, wins: 0, losses: 0 };
+                duos[pairKey].games++;
+                if (t.win) duos[pairKey].wins++;
+                else duos[pairKey].losses++;
+            }
+        });
+    });
+
+    return Object.entries(duos)
+        .map(([duo, s]) => ({
+            duo,
+            games: s.games,
+            wins: s.wins,
+            losses: s.losses,
+            winRate: Math.round((s.wins / s.games) * 100)
+        }))
+        .sort((a, b) => (b.wins - a.wins) || (b.winRate - a.winRate) || (b.games - a.games));
+}
+
+
+/* ============================================================
+   RENDERING
+============================================================ */
+
+function renderPlayers() {
+    const container = document.getElementById("playerList");
+    const countEl = document.getElementById("playerCount");
+    const activeCountEl = document.getElementById("activePlayerCount");
+
+    const activePlayers = getActivePlayers();
+    countEl.textContent = state.players.length;
+    activeCountEl.textContent = `${activePlayers.length} активних`;
+
+    if (!state.players.length) {
+        container.innerHTML = `<div class="empty-state">Додайте хоча б 4 гравців для старту ротації.</div>`;
+        return;
+    }
+
+    container.innerHTML = state.players.map(p => {
+        const name = getPlayerName(p);
+        const paused = isPlayerPaused(p);
+
+        return `
+            <div class="player-chip ${paused ? 'paused' : ''}">
+                <span class="player-chip-name" onclick="renamePlayer('${escapeJs(name)}')" title="Натисніть, щоб перейменувати">
+                    ${paused ? '⏸️' : '🟢'} ${escapeHtml(name)} ✏️
+                </span>
+                <div class="player-chip-actions">
+                    <button type="button" class="chip-btn" onclick="togglePlayerPause('${escapeJs(name)}')" title="${paused ? 'Увімкнути гравця' : 'Поставити на паузу'}">
+                        ${paused ? '▶️' : '⏸️'}
+                    </button>
+                    <button type="button" class="chip-btn remove" onclick="removePlayer('${escapeJs(name)}')" title="Видалити">
+                        ×
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderMatch() {
+    const container = document.getElementById("matchContent");
+    const undoContainer = document.getElementById("matchHeaderRight");
+    const active = getActivePlayers();
+
+    if (state.undoStack.length > 0) {
+        undoContainer.innerHTML = `
+            <button class="btn-undo" onclick="undoLastMatch()">
+                ↩️ Скасувати останній результат
+            </button>
+        `;
+    } else {
+        undoContainer.innerHTML = "";
+    }
+
+    if (active.length < 4) {
+        container.innerHTML = `
+            <div class="empty-state">
+                Для гри потрібно мінімум <strong>4 активні гравці</strong>.<br>
+                Зараз активних: ${active.length}.
+            </div>
+        `;
+        return;
+    }
+
+    ensureTableReady();
+
+    const rot = state.rotation;
+    const teamA = rot.tableA;
+    const teamB = rot.tableB;
+
+    if (!teamA || !teamB) {
+        container.innerHTML = `<div class="empty-state">Формування столу...</div>`;
+        return;
+    }
+
+    const gameA = teamA.games + 1;
+    const gameB = teamB.games + 1;
+    const matchCount = state.days[state.currentDay].length + 1;
+
+    let hintText = "";
+    if (rot.isFirstMatch) {
+        hintText = "⚡ <strong>Перший матч сесії</strong>: переможець залишається на 2-гу гру, програвший виходить зі столу.";
+    } else {
+        const leaving = teamA.games >= 1 ? teamA.players.join(" + ") : teamB.players.join(" + ");
+        const staying = teamA.games >= 1 ? teamB.players.join(" + ") : teamA.players.join(" + ");
+        hintText = `🔄 Після цього матчу <strong>${escapeHtml(leaving)}</strong> виходять зі столу, а <strong>${escapeHtml(staying)}</strong> залишаються на 2-гу гру.`;
+    }
+
+    container.innerHTML = `
+        <div class="match-header-info">
+            <span class="match-tag">Матч #${matchCount}</span>
+            <span class="match-rules-hint">Формат: 2 гри на пару зі зсувом</span>
+        </div>
+
+        <div class="teams-grid">
+            <!-- TEAM A -->
+            <div class="team-box team-a ${gameA === 2 ? 'final-game' : ''}">
+                <div class="team-title">Команда A</div>
+                <div class="team-names">${teamA.players.map(escapeHtml).join(" + ")}</div>
+                <div class="game-pill ${gameA === 1 ? 'game-1' : 'game-2'}">
+                    ${gameA === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінальна гра (2 з 2)'}
+                </div>
+            </div>
+
+            <div class="vs-divider">VS</div>
+
+            <!-- TEAM B -->
+            <div class="team-box team-b ${gameB === 2 ? 'final-game' : ''}">
+                <div class="team-title">Команда B</div>
+                <div class="team-names">${teamB.players.map(escapeHtml).join(" + ")}</div>
+                <div class="game-pill ${gameB === 1 ? 'game-1' : 'game-2'}">
+                    ${gameB === 1 ? '🟢 Гра 1 з 2' : '🟡 Фінальна гра (2 з 2)'}
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-win-a" onclick="recordResult('A')">
+                🏆 ${teamA.players.map(escapeHtml).join(" + ")} перемогли
+            </button>
+            <button class="btn-win-b" onclick="recordResult('B')">
+                🏆 ${teamB.players.map(escapeHtml).join(" + ")} перемогли
+            </button>
+        </div>
+
+        <div class="rotation-status-banner">
+            <div>${hintText}</div>
+        </div>
+    `;
+}
+
+function renderQueue() {
+    const queueList = document.getElementById("queueList");
+    const swingerList = document.getElementById("swingerList");
+    const queueCount = document.getElementById("queueCount");
+
+    const rot = state.rotation;
+    const pairsQueue = rot.pairsQueue || [];
+    const pairs = rot.pairs || [];
+    const swinger = rot.swinger;
+
+    queueCount.textContent = pairsQueue.length;
+
+    if (!pairsQueue.length) {
+        queueList.innerHTML = `<div class="empty-state" style="padding:10px">Всі пари на столі</div>`;
+    } else {
+        queueList.innerHTML = pairsQueue.map((pairIdx, idx) => {
+            const pairPlayers = pairs[pairIdx] || [];
+            return `
+                <div class="queue-item">
+                    <span>#${idx + 1} · ${pairPlayers.map(escapeHtml).join(" + ")}</span>
+                    <span class="badge">Готуються</span>
+                </div>
+            `;
+        }).join("");
+    }
+
+    if (!swinger) {
+        swingerList.innerHTML = `<div class="empty-state" style="padding:10px">Немає (парна кількість гравців)</div>`;
+    } else {
+        swingerList.innerHTML = `
+            <div class="queue-item">
+                <span>🔄 <strong>${escapeHtml(swinger)}</strong></span>
+                <span class="swinger-badge">Зайде наступним</span>
+            </div>
+        `;
+    }
+}
+
+function renderSummary() {
+    const matches = state.days[state.currentDay];
+    const stats = calculateStats(matches);
+
+    const totalGames = Object.values(stats).reduce((sum, s) => sum + s.games, 0);
+    const totalWins = Object.values(stats).reduce((sum, s) => sum + s.wins, 0);
+    const activePlayers = Object.values(stats).filter(s => s.games > 0).length;
+
+    document.getElementById("todayMatches").textContent = matches ? matches.length : 0;
+    document.getElementById("todayGames").textContent = totalGames;
+    document.getElementById("todayWins").textContent = totalWins;
+    document.getElementById("todayPlayers").textContent = activePlayers;
+}
+
+function renderRanking() {
+    const matches = state.days[state.currentDay];
+    const stats = calculateStats(matches);
+
+    const rows = Object.entries(stats).sort((a, b) => {
+        return (b[1].points - a[1].points) || (b[1].wins - a[1].wins) || (b[1].games - a[1].games);
+    });
+
+    document.getElementById("dailyRanking").innerHTML = makeRankingTable(rows);
+
+    // Total Ranking
+    const allMatches = DAYS.flatMap(day => state.days[day] || []);
+    const totalStats = calculateStats(allMatches);
+    const totalRows = Object.entries(totalStats).sort((a, b) => {
+        return (b[1].points - a[1].points) || (b[1].wins - a[1].wins) || (b[1].games - a[1].games);
+    });
+
+    document.getElementById("totalRanking").innerHTML = makeRankingTable(totalRows);
+
+    // Duo Ranking
+    const duoStats = calculateDuoStats(allMatches);
+    renderDuoTable(duoStats);
+}
+
+function makeRankingTable(rows) {
+    if (!rows.length || rows.every(r => r[1].games === 0)) {
+        return `<div class="empty-state">Поки що немає зіграних матчів.</div>`;
+    }
+
+    return `
+        <div class="table-responsive">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Гравець</th>
+                        <th>Ігор</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>Win %</th>
+                        <th>Серія</th>
+                        <th>Очки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows.map(([name, s], index) => {
+                        const winRate = s.games ? Math.round((s.wins / s.games) * 100) : 0;
+                        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                        
+                        let streakHtml = `<span style="color:var(--text-muted)">—</span>`;
+                        if (s.streak > 0) {
+                            streakHtml = `<span class="streak-badge streak-w">🔥 ${s.streak}W</span>`;
+                        } else if (s.streak < 0) {
+                            streakHtml = `<span class="streak-badge streak-l">❄️ ${Math.abs(s.streak)}L</span>`;
+                        }
+
+                        return `
+                            <tr>
+                                <td class="rank-cell ${rankClass}">#${index + 1}</td>
+                                <td><strong>${escapeHtml(name)}</strong></td>
+                                <td>${s.games}</td>
+                                <td style="color:var(--green);font-weight:700">${s.wins}</td>
+                                <td style="color:var(--red);font-weight:700">${s.losses}</td>
+                                <td><strong>${winRate}%</strong></td>
+                                <td>${streakHtml}</td>
+                                <td><strong style="color:#60a5fa">${s.points}</strong></td>
+                            </tr>
+                        `;
+                    }).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderDuoTable(duos) {
+    const container = document.getElementById("duoRanking");
+    if (!duos.length) {
+        container.innerHTML = `<div class="empty-state">Немає даних про пари.</div>`;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="table-responsive">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Дует</th>
+                        <th>Ігор</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>Win %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${duos.map((d, index) => `
+                        <tr>
+                            <td class="rank-cell">#${index + 1}</td>
+                            <td><strong>${escapeHtml(d.duo)}</strong></td>
+                            <td>${d.games}</td>
+                            <td style="color:var(--green);font-weight:700">${d.wins}</td>
+                            <td style="color:var(--red);font-weight:700">${d.losses}</td>
+                            <td><strong>${d.winRate}%</strong></td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderHistory() {
+    const matches = state.days[historyDay] || [];
+    const container = document.getElementById("history");
+
+    if (!matches.length) {
+        container.innerHTML = `<div class="empty-state">У ${DAY_NAMES[historyDay].toLowerCase()} матчів ще немає.</div>`;
+        return;
+    }
+
+    container.innerHTML = [...matches].reverse().map((match, reverseIndex) => {
+        const matchIndex = matches.length - 1 - reverseIndex;
+        const number = matches.length - reverseIndex;
+        const isWinA = match.winner === "A";
+
+        return `
+            <div class="history-item">
+                <div class="history-main">
+                    <span class="history-num">#${number}</span>
+                    <span class="${isWinA ? 'history-winner' : 'history-loser'}">
+                        ${isWinA ? '🏆 ' : ''}${match.teamA.map(escapeHtml).join(" + ")}
+                    </span>
+                    <span style="color:var(--text-muted)">vs</span>
+                    <span class="${!isWinA ? 'history-winner' : 'history-loser'}">
+                        ${!isWinA ? '🏆 ' : ''}${match.teamB.map(escapeHtml).join(" + ")}
+                    </span>
+                </div>
+                <div class="history-meta">
+                    <span>${match.time}</span>
+                    <button class="btn-delete-match" onclick="deleteMatch('${historyDay}', ${matchIndex})" title="Видалити матч">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function changeDay() {
+    state.currentDay = document.getElementById("daySelect").value;
+    historyDay = state.currentDay;
+    rebuildRotation();
+    save();
+    render();
+}
+
+function setHistoryDay(day) {
+    historyDay = day;
+    document.querySelectorAll(".day-tab").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.day === day);
+    });
+    renderHistory();
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function escapeJs(value) {
+    return String(value)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'");
+}
+
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `ping_pong_backup_${new Date().toISOString().slice(0,10)}.json`);
+    dlAnchor.click();
+    showToast("💾 Дані успішно експортовано!", "success");
+}
+
+function importData() {
+    document.getElementById("importFileInput").click();
+}
+
+function handleFileImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const imported = JSON.parse(evt.target.result);
+            if (imported.players && imported.days) {
+                state = imported;
+                save();
+                render();
+                showToast("Дані успішно імпортовано!", "success");
+            } else {
+                showToast("Невірний формат файлу JSON", "error");
+            }
+        } catch (err) {
+            showToast("Помилка читання JSON файлу", "error");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function resetAll() {
+    if (!confirm("⚠️ ВИ ВПЕВНЕНІ? Всі результати, матчі та історія за всі дні будуть БЕЗПОВОРОТНО видалені!")) return;
+    localStorage.removeItem("pingPongState");
+    state = JSON.parse(JSON.stringify(defaultState));
+    render();
+    showToast("Всі дані очищено", "info");
+}
+
+
+/* ============================================================
+   MAIN RENDER
+============================================================ */
+
+function render() {
+    document.getElementById("daySelect").value = state.currentDay;
+    renderPlayers();
+    renderMatch();
+    renderQueue();
+    renderSummary();
+    renderRanking();
+    renderHistory();
+}
+
+render();
+
+</script>
+</body>
+</html>
